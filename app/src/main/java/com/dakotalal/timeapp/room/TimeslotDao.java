@@ -1,8 +1,10 @@
 package com.dakotalal.timeapp.room;
 
+import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -16,11 +18,17 @@ import androidx.room.Update;
 public interface TimeslotDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Timeslot timeslot);
+    void insertTimeslot(Timeslot timeslot);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertDay(Day day);
+
+    @Query("SELECT * from day_table WHERE date = :date")
+    LiveData<Day> getDay(Date date);
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertMultiple(List<Timeslot> timeslots);
+    void insertMultipleTimeslots(List<Timeslot> timeslots);
 
     @Update
     void update(Timeslot timeslot);

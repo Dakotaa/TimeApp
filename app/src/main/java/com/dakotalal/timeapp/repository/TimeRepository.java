@@ -7,10 +7,12 @@ import android.util.Log;
 import com.dakotalal.timeapp.room.TimeActivityDao;
 import com.dakotalal.timeapp.room.TimeRoomDatabase;
 import com.dakotalal.timeapp.room.TimeslotDao;
+import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -74,7 +76,7 @@ public class TimeRepository {
 
         @Override
         protected Void doInBackground(final List<Timeslot>... params) {
-            tsDao.insertMultiple(params[0]);
+            tsDao.insertMultipleTimeslots(params[0]);
             return null;
         }
     }
@@ -122,19 +124,6 @@ public class TimeRepository {
     }
 
 
-
-    /*
-     Gets all timeslots between a start and end time
-     Doesn't run async yet because returning a result from an AsyncTask is annoying.
-     TODO: Make this async if it's slow
-     */
-    public LiveData<List<Timeslot>> getTimeslots(long start, long finish) {
-        Log.d("TimeRepository", "getting timeslots...");
-        LiveData<List<Timeslot>> timeslots = timeslotDao.getTimeslotsInPeriod(start, finish);
-        return timeslots;
-    }
-
-
     public void deleteAllTimeActivities() {
         new deleteAllTimeActivitiesAsyncTask(timeActivityDao).execute();
     }
@@ -151,6 +140,22 @@ public class TimeRepository {
             taDao.deleteAll();
             return null;
         }
+    }
+
+
+    /*
+     TODO: Make this async if it's slow
+     */
+    public LiveData<List<Timeslot>> getTimeslots(long start, long finish) {
+        return timeslotDao.getTimeslotsInPeriod(start, finish);
+    }
+
+    public LiveData<Day> getDay(Date date) {
+        return timeslotDao.getDay(date);
+    }
+
+    public void insertDay(Day day) {
+        timeslotDao.insertDay(day);
     }
 
 }
