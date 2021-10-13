@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Time App</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hint_word">Word...</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Word not saved because it is empty.</string>
+    <string name="clear_all_data">Clear all data</string>
+    <string name="activities">Activities</string>
+    <string name="create_an_activity">Create an activity</string>
+    <string name="activity_not_saved">Fields left empty, Activity not saved</string>
+    <string name="label_activity_list">My Activities</string>
+    <string name="label_create_activity">Create an activity</string>
+    <string name="hint_activity_name">Activity name</string>
+    <string name="button_create_activity">Create Activity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="timelog">Timelog</string>
+    <string name="activity_not_set">No Activity</string>
+</resources>
