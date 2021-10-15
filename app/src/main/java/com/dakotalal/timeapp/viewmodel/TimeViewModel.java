@@ -6,12 +6,14 @@ import android.os.Build;
 import android.util.Log;
 
 import com.dakotalal.timeapp.repository.TimeRepository;
+import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -27,22 +29,16 @@ import androidx.lifecycle.Observer;
 public class TimeViewModel extends AndroidViewModel {
     private TimeRepository timeRepository;
     private LiveData<List<TimeActivity>> allTimeActivities;
-    private LiveData<List<Timeslot>> dayTimeslots;
+    private LiveData<List<Day>> allDays;
+    private MutableLiveData<LocalDate> currentDay;
+    private LiveData<List<Timeslot>> currentDayTimeslots;
     private Hashtable<String, TimeActivity> timeActivitiesByLabel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public TimeViewModel(Application application) {
         super(application);
         timeRepository = new TimeRepository(application);
-        allTimeActivities = timeRepository.getAllTimeActivities();
-    }
-
-    public LiveData<List<TimeActivity>> getAllTimeActivities() {
-        return this.allTimeActivities;
-    }
-
-    public LiveData<List<Timeslot>> getDayTimeslots() {
-        return this.dayTimeslots;
+        getAllDays();
     }
 
     public Hashtable<String, TimeActivity> getTimeActivitiesByLabel() {
@@ -92,25 +88,58 @@ public class TimeViewModel extends AndroidViewModel {
         timeRepository.deleteAllTimeActivities();
     }
 
-    /**
-     * Gets a list of the Timeslots that make up the given day, in the user's timezone
-     * There are no timeslots for the given day, the day is created
-     * @param date a localdate representing the day to retrieve
-     * @return a list of all Timeslots that fall within the date, in the user's timezone
-     */
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public LiveData<List<Timeslot>> changeDay(LocalDate date) {
+    public LiveData<List<Timeslot>> getCurrentDayTimeslots() {
+        if (currentDayTimeslots == null) {
+            currentDayTimeslots = new MutableLiveData<>();
+            currentDayTimeslots = timeRepository.retrieveDay(LocalDate.now());
+        }
+        return currentDayTimeslots;
+    }
+
+    public LiveData<List<TimeActivity>> getAllTimeActivities() {
+        if (allTimeActivities == null) {
+            allTimeActivities = new MutableLiveData<>();
+            allTimeActivities = timeRepository.getAllTimeActivities();
+        }
+        return this.allTimeActivities;
+    }
+
+    public LiveData<List<Day>> getAllDays() {
+        if (allDays == null) {
+            allDays = new MutableLiveData<>();
+            allDays = timeRepository.getAllDays();
+        }
+        return allDays;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void getOrCreateCurrentDayTimeslots() {
         Log.d("TimeViewModel", "getting day");
+        LocalDate date = LocalDate.now();
         ZoneId zoneId = ZoneId.systemDefault();
         long start = date.atTime(0, 1).atZone(zoneId).toEpochSecond();
         long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
-        Log.d("TimeViewModel", "retrieving slots...");
-        dayTimeslots = timeRepository.getTimeslots(start, end);
-//        if (dayTimeslots.getValue() == null) {
-//            Log.d("TimeViewModel", "slots not retrieved");
-//            dayTimeslots = createDay(date);
-//        }
-        return dayTimeslots;
+        Log.d("TimeViewModel", "day found, retrieving slots...");
+        currentDayTimeslots = timeRepository.getTimeslots(start, end);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LiveData<List<Timeslot>> getDay(LocalDate date) {
+        Log.d("TimeViewModel", "getting day");
+        ZoneId zoneId = ZoneId.systemDefault();
+        Date d = Date.from(date.atStartOfDay(zoneId).toInstant());
+        if (!allDays.getValue().contains(d)) {
+            Log.d("TimeViewModel", "day not found");
+            return createDay(date);
+        } else {
+            long start = date.atTime(0, 1).atZone(zoneId).toEpochSecond();
+            long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
+            Log.d("TimeViewModel", "day found, retrieving slots...");
+            return timeRepository.getTimeslots(start, end);
+        }
     }
 
     /**
@@ -123,15 +152,16 @@ public class TimeViewModel extends AndroidViewModel {
         Log.d("TimeViewmodel", "Creating day");
         LiveData<List<Timeslot>> timeslots = new MutableLiveData<>(new ArrayList<Timeslot>());
         ZoneId zoneId = ZoneId.systemDefault();
+        // create timeslots for the day
         long start = date.atTime(0, 0).atZone(zoneId).toEpochSecond();
         for (int i = 0; i < 24; i++) {
-            // add a new timeslot, lasting one hour
             timeslots.getValue().add(new Timeslot(start, start + 3600));
-            // increase the start time to the start time of the next interval
             start += 3600;
         }
+        Day day = new Day(Date.from(date.atStartOfDay(zoneId).toInstant()));
+        timeRepository.insertDay(day);
         timeRepository.insertTimeslots(timeslots.getValue());
-        Log.d("TimeViewModel", "Inserting timeslots");
+        Log.d("TimeViewModel", "Inserting day and timeslots");
         return timeslots;
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dakotalal.timeapp.R;
+import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListAdapter;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
@@ -52,6 +53,10 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
 
     void setTimeslots(List<Timeslot> timeslots) {
         this.timeslots = timeslots;
+        notifyDataSetChanged();
+    }
+
+    void updateTimeActivities() {
         notifyDataSetChanged();
     }
 

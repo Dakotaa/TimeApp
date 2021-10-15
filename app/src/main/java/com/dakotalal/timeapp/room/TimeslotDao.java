@@ -1,5 +1,6 @@
 package com.dakotalal.timeapp.room;
 
+import com.dakotalal.timeapp.room.entities.DateConverter;
 import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
@@ -12,6 +13,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.TypeConverters;
 import androidx.room.Update;
 
 @Dao
@@ -23,9 +25,13 @@ public interface TimeslotDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertDay(Day day);
 
+    @TypeConverters(DateConverter.class)
     @Query("SELECT * from day_table WHERE date = :date")
     LiveData<Day> getDay(Date date);
 
+    @TypeConverters(DateConverter.class)
+    @Query("SELECT * from day_table")
+    LiveData<List<Day>> getAllDays();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertMultipleTimeslots(List<Timeslot> timeslots);
@@ -33,13 +39,13 @@ public interface TimeslotDao {
     @Update
     void update(Timeslot timeslot);
 
-
     // Get the TimeSlot that the given time occurs in
+
     @Query("SELECT * from timeslot_table WHERE start >= :time AND :time < finish")
     LiveData<Timeslot> getTimeslot(long time);
 
-
     // Get a LiveData List of all Timeslots
+
     @Query("SELECT * from timeslot_table")
     LiveData<List<Timeslot>> getAllTimeslots();
 

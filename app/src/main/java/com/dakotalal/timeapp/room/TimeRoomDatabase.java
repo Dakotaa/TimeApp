@@ -31,6 +31,7 @@ public abstract class TimeRoomDatabase extends RoomDatabase {
                             TimeRoomDatabase.class, "room_database")
                             // Wipes and rebuilds instead of migrating
                             // if no Migration object.
+                            .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .addCallback(sRoomDatabaseCallback)
                             .build();

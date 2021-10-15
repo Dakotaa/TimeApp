@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,18 +39,22 @@ public class TimelogActivity extends AppCompatActivity implements TimeslotListAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timelog);
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
-        updateListAdapater();
+
+        adapter = new TimeslotListAdapter(TimelogActivity.this, TimelogActivity.this, timeViewModel);
+        RecyclerView recyclerView = findViewById(R.id.timeslot_list_recyclerview);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(TimelogActivity.this));
 
         timeViewModel.getAllTimeActivities().observe(this, new Observer<List<TimeActivity>>() {
             @Override
             public void onChanged(List<TimeActivity> timeActivities) {
-                updateListAdapater();
+                adapter.updateTimeActivities();
             }
         });
 
-        timeViewModel.changeDay(LocalDate.now()).observe(this, new Observer<List<Timeslot>>() {
+        timeViewModel.getCurrentDayTimeslots().observe(this, new Observer<List<Timeslot>>() {
             @Override
-            public void onChanged(@Nullable final List<Timeslot> timeslots) {
+            public void onChanged(List<Timeslot> timeslots) {
                 adapter.setTimeslots(timeslots);
                 Log.d("TimelogActivity", "Got timeslots for day");
             }
@@ -57,7 +62,7 @@ public class TimelogActivity extends AppCompatActivity implements TimeslotListAd
 
     }
 
-    public void updateListAdapater() {
+    public void updateListAdapter() {
         adapter = new TimeslotListAdapter(TimelogActivity.this, TimelogActivity.this, timeViewModel);
         RecyclerView recyclerView = findViewById(R.id.timeslot_list_recyclerview);
         recyclerView.setAdapter(adapter);

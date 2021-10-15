@@ -2,6 +2,7 @@ package com.dakotalal.timeapp.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import com.dakotalal.timeapp.room.TimeActivityDao;
@@ -12,10 +13,15 @@ import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class TimeRepository {
     private TimeslotDao timeslotDao;
@@ -150,12 +156,46 @@ public class TimeRepository {
         return timeslotDao.getTimeslotsInPeriod(start, finish);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LiveData<List<Timeslot>> retrieveDay(LocalDate date) {
+        createDay(date);
+        Log.d("TimeRepository", "retrieving day...");
+        ZoneId zoneId = ZoneId.systemDefault();
+        long start = date.atTime(0, 1).atZone(zoneId).toEpochSecond();
+        long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
+        LiveData<List<Timeslot>> timeslots = timeslotDao.getTimeslotsInPeriod(start, end);
+        return timeslots;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LiveData<List<Timeslot>> createDay(LocalDate date) {
+        Log.d("TimeRepository", "Creating day");
+        LiveData<List<Timeslot>> timeslots = new MutableLiveData<>(new ArrayList<Timeslot>());
+        ZoneId zoneId = ZoneId.systemDefault();
+        // create timeslots for the day
+        long start = date.atTime(0, 0).atZone(zoneId).toEpochSecond();
+        for (int i = 0; i < 24; i++) {
+            timeslots.getValue().add(new Timeslot(start, start + 3600));
+            start += 3600;
+        }
+        Day day = new Day(Date.from(date.atStartOfDay(zoneId).toInstant()));
+        insertDay(day);
+        insertTimeslots(timeslots.getValue());
+        return timeslots;
+    }
+
     public LiveData<Day> getDay(Date date) {
         return timeslotDao.getDay(date);
     }
 
-    public void insertDay(Day day) {
+    public LiveData<List<Day>> getAllDays() {
+        return timeslotDao.getAllDays();
+    }
+
+    public LiveData<Void> insertDay(Day day) {
         timeslotDao.insertDay(day);
+        return null;
     }
 
 }
