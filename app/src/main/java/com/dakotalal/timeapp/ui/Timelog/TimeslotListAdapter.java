@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
@@ -49,7 +51,7 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
             Timeslot current = timeslots.get(position);
             formatTimeslotHolder(holder, current);
         } else {
-            holder.activityLabel.setText("No timeslots!");
+            holder.activityLabel.setText(R.string.no_timeslots_found);
         }
     }
 
@@ -88,7 +90,6 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         long now = System.currentTimeMillis()/1000;
         String start = Instant.ofEpochSecond(timeStart).atZone(ZoneId.systemDefault()).format(formatter);
         String end = Instant.ofEpochSecond(timeEnd).atZone(ZoneId.systemDefault()).format(formatter);
-
         // Format the activity label and colour the timeslot based on the activity colour
         String activityLabel = timeslot.getActivityLabel();
         View backgroundView = holder.itemView.findViewById(R.id.timeslot_background);
@@ -104,7 +105,7 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
             holder.time.setTextColor(textColour);
             holder.activityLabel.setTextColor(textColour);
         }
-
+        holder.setAlterable(true);
         // Format the timeslot depending on whether it's past/present/future
         if (timeEnd > now) {
             if (timeStart < now) {   // Timeslot is the current timeslot
@@ -154,8 +155,11 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
          */
         @Override
         public void onClick(View view) {
+            Log.d("TimeslotListAdapter", "Alterable: " + alterable);
             if (alterable) {
                 onTimeslotListener.onTimeslotClick(getAdapterPosition());
+            } else {
+                Toast.makeText(itemView.getContext(), "Can't edit future timeslot!", Toast.LENGTH_SHORT).show();
             }
         }
     }

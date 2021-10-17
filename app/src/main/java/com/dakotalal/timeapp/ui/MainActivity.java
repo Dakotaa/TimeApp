@@ -6,21 +6,19 @@ import android.os.Bundle;
 
 import com.dakotalal.timeapp.R;
 
-import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListActivity;
-import com.dakotalal.timeapp.ui.Timelog.TimelogActivity;
-import com.dakotalal.timeapp.ui.Timelog.TimelogDayFragment;
-import com.dakotalal.timeapp.viewmodel.TimeViewModel;
+import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListFragment;
+import com.dakotalal.timeapp.ui.Timelog.TimelogFragment;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.dakotalal.timeapp.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
-    private TimeViewModel timeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +37,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
+        //setSupportActionBar(binding.toolbar);
 
-        setSupportActionBar(binding.toolbar);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        NavController navController = Navigation.findNavController(findViewById(R.id.nav_fragment));
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -82,12 +82,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchTimeActivityList(View view) {
-        Intent intent = new Intent(this, TimeActivityListActivity.class);
+        Intent intent = new Intent(this, TimeActivityListFragment.class);
         startActivity(intent);
     }
 
     public void launchTimelog(View view) {
-        Intent intent = new Intent(this, TimelogActivity.class);
+        Intent intent = new Intent(this, TimelogFragment.class);
         startActivity(intent);
     }
+
 }

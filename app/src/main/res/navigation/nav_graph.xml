@@ -3,26 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
+    app:startDestination="@id/nav_home">
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.dakotalal.timeapp.ui.TimeActivities.TimeActivityRecyclerFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_time_activity_recycler">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
+        android:id="@+id/nav_timelog"
+        android:name="com.dakotalal.timeapp.ui.Timelog.TimelogFragment"
+        android:label="fragment_timelog"
+        tools:layout="@layout/fragment_timelog" />
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.dakotalal.timeapp.ui.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        android:id="@+id/nav_home"
+        android:name="com.dakotalal.timeapp.ui.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/nav_activities"
+        android:name="com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListFragment"
+        android:label="fragment_time_activity_list"
+        tools:layout="@layout/fragment_time_activity_list" />
 </navigation>

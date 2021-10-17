@@ -121,16 +121,13 @@ public class TimeViewModel extends AndroidViewModel {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Timeslot>> getDay(LocalDate date) {
-        Log.d("TimeViewModel", "getting day");
         ZoneId zoneId = ZoneId.systemDefault();
         Date d = Date.from(date.atStartOfDay(zoneId).toInstant());
         if (!allDays.getValue().contains(d)) {
-            Log.d("TimeViewModel", "day not found");
             return createDay(date);
         } else {
             long start = date.atTime(0, 1).atZone(zoneId).toEpochSecond();
             long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
-            Log.d("TimeViewModel", "day found, retrieving slots...");
             return timeRepository.getTimeslots(start, end);
         }
     }
@@ -142,7 +139,6 @@ public class TimeViewModel extends AndroidViewModel {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Timeslot>> createDay(LocalDate date) {
-        Log.d("TimeViewmodel", "Creating day");
         LiveData<List<Timeslot>> timeslots = new MutableLiveData<>(new ArrayList<Timeslot>());
         ZoneId zoneId = ZoneId.systemDefault();
         // create timeslots for the day
@@ -153,7 +149,6 @@ public class TimeViewModel extends AndroidViewModel {
         }
         timeRepository.insertDay(new Day(date));
         timeRepository.insertTimeslots(timeslots.getValue());
-        Log.d("TimeViewModel", "Inserting day and timeslots");
         return timeslots;
     }
 }
