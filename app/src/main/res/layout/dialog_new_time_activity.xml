@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorScreenBackground"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:id="@+id/create_time_activity">
+
+    <EditText
+        android:id="@+id/edit_activity_label"
+        style="@style/text_view_style"
+        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="@string/hint_activity_name"
+        android:inputType="textCapSentences"
+        android:layout_marginBottom="8dp"/>
+
+    <com.skydoves.colorpickerview.ColorPickerView
+        android:id="@+id/color_picker"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@id/edit_activity_label"/>
+
+</RelativeLayout>

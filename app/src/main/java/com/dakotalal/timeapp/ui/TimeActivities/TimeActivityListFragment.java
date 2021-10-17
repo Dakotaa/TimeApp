@@ -2,7 +2,7 @@ package com.dakotalal.timeapp.ui.TimeActivities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,7 +30,8 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
     private AppBarConfiguration appBarConfiguration;
     private TimeViewModel timeViewModel;
     TimeActivityListAdapter adapter;
-    public static final int NEW_TIME_ACTIVITY_ACTIVITY_REQUEST_CODE = 1;
+    public static final int CREATOR_FRAGMENT = 1;
+
     private FloatingActionButton fabCreate;
     private FloatingActionButton fabDelete;
 
@@ -50,15 +52,16 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
         // initialize the FAB to launch the activity to create TimeActivities
         fabCreate = getView().findViewById(R.id.fab_add_activity);
         fabCreate.setOnClickListener(view1 -> {
-            Intent intent = new Intent(TimeActivityListFragment.this.getActivity(), NewTimeActivityActivity.class);
-            startActivityForResult(intent, NEW_TIME_ACTIVITY_ACTIVITY_REQUEST_CODE);
+            DialogFragment frag = new CreateTimeActivityDialogFragment();
+            frag.setTargetFragment(this, CREATOR_FRAGMENT);
+            frag.show(getFragmentManager().beginTransaction(), "CreateActivityDialog");
         });
 
-        // initialize the FAB to launch the activity to create TimeActivities
-        fabDelete= getView().findViewById(R.id.fab_delete_activties);
-        fabDelete.setOnClickListener(view1 -> {
-            timeViewModel.deleteAllTimeActivities();
-        });
+//        // initialize the FAB to launch the activity to create TimeActivities
+//        fabDelete= getView().findViewById(R.id.fab_delete_activties);
+//        fabDelete.setOnClickListener(view1 -> {
+//            timeViewModel.deleteAllTimeActivities();
+//        });
 
         // setup and initialize the view model
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
@@ -81,10 +84,9 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_TIME_ACTIVITY_ACTIVITY_REQUEST_CODE && resultCode == 1) {
-            TimeActivity timeActivity = new TimeActivity(
-                    data.getStringExtra(NewTimeActivityActivity.EXTRA_REPLY_LABEL),
-                    data.getIntExtra(NewTimeActivityActivity.EXTRA_REPLY_COLOUR, 0));
+        if (requestCode == CREATOR_FRAGMENT && resultCode == Activity.RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            TimeActivity timeActivity = new TimeActivity(bundle.getString("label", " "), bundle.getInt("colour", 0));
             timeViewModel.insertTimeActivity(timeActivity);
         } else {
             Toast.makeText(getContext(), R.string.activity_not_saved,

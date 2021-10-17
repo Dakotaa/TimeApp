@@ -93,34 +93,46 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         // Format the activity label and colour the timeslot based on the activity colour
         String activityLabel = timeslot.getActivityLabel();
         View backgroundView = holder.itemView.findViewById(R.id.timeslot_background);
-        if (activityLabel == null) {    // no activity has been set for this timeslot
-            holder.activityLabel.setText(R.string.activity_not_set);
-            backgroundView.setBackgroundColor(Color.GRAY);
-        } else {    // timeslot has an activity set
-            holder.activityLabel.setText(activityLabel);
-            // get the colour for this activity, and the contrasting text colour
-            int backgroundColour = timeViewModel.getTimeActivityColour(activityLabel);
-            int textColour = TimeActivityListAdapter.getContrastColor(backgroundColour);
-            backgroundView.setBackgroundColor(backgroundColour);
-            holder.time.setTextColor(textColour);
-            holder.activityLabel.setTextColor(textColour);
-        }
+
         holder.setAlterable(true);
+
+        String timestamp;
+        String label;
+        int bgColour;
+        int textColour;
+        int typeface = Typeface.NORMAL;
+
+        if (activityLabel == null) {    // no activity has been set for this timeslot
+            label = "No Activity";
+            bgColour = Color.GRAY;
+        } else {    // timeslot has an activity set
+            label = activityLabel;
+            // get the colour for this activity, and the contrasting text colour
+            bgColour = timeViewModel.getTimeActivityColour(activityLabel);
+        }
+
         // Format the timeslot depending on whether it's past/present/future
         if (timeEnd > now) {
             if (timeStart < now) {   // Timeslot is the current timeslot
-                holder.time.setText(MessageFormat.format("{0} - {1} (NOW)", start, end));
-                holder.time.setTypeface(null, Typeface.BOLD);
+                timestamp = MessageFormat.format("{0} - {1} (NOW)", start, end);
+                typeface = Typeface.BOLD;
             } else {    // Timeslot is in the future
-                holder.time.setText(MessageFormat.format("{0} - {1}", start, end));
-                holder.activityLabel.setText(" ");
-                holder.time.setTypeface(null, Typeface.ITALIC);
-                backgroundView.setBackgroundColor(Color.DKGRAY);
+                timestamp = MessageFormat.format("{0} - {1}", start, end);
+                label = " ";
+                typeface = Typeface.ITALIC;
+                bgColour = Color.DKGRAY;
                 holder.setAlterable(false);
             }
         } else {    // Timeslot is in the past
-            holder.time.setText(MessageFormat.format("{0} - {1}", start, end));
+            timestamp = MessageFormat.format("{0} - {1}", start, end);
         }
+
+        backgroundView.setBackgroundColor(bgColour);
+        textColour = TimeActivityListAdapter.getContrastColor(bgColour);
+        holder.activityLabel.setText(label);
+        holder.time.setTextColor(textColour);
+        holder.time.setTypeface(null, typeface);
+        holder.time.setText(timestamp);
     }
 
     class TimeslotViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

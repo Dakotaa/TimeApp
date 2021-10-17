@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeApp">
         <activity
-            android:name=".ui.TimeActivities.NewTimeActivityActivity"
+            android:name=".ui.TimeActivities.CreateTimeActivityDialogFragment"
             android:exported="true"
             android:label="@string/label_create_activity" />
         <activity
