@@ -13,6 +13,9 @@
             android:name=".ui.Timelog.TimelogActivity"
             android:exported="true" />
         <activity
+            android:name=".ui.Timelog.TimelogDayFragment"
+            android:exported="true" />
+        <activity
             android:name=".ui.TimeActivities.TimeActivityListActivity"
             android:exported="true"
             android:label="@string/label_activity_list" />

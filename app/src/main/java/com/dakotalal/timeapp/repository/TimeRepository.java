@@ -157,14 +157,18 @@ public class TimeRepository {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createToday() {
+        createDay(LocalDate.now());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Timeslot>> retrieveDay(LocalDate date) {
         createDay(date);
         Log.d("TimeRepository", "retrieving day...");
         ZoneId zoneId = ZoneId.systemDefault();
-        long start = date.atTime(0, 1).atZone(zoneId).toEpochSecond();
+        long start = date.atTime(0, 0).atZone(zoneId).toEpochSecond();
         long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
-        LiveData<List<Timeslot>> timeslots = timeslotDao.getTimeslotsInPeriod(start, end);
-        return timeslots;
+        return timeslotDao.getTimeslotsInPeriod(start, end);
     }
 
 
@@ -179,13 +183,12 @@ public class TimeRepository {
             timeslots.getValue().add(new Timeslot(start, start + 3600));
             start += 3600;
         }
-        Day day = new Day(Date.from(date.atStartOfDay(zoneId).toInstant()));
-        insertDay(day);
+        insertDay(new Day(date));
         insertTimeslots(timeslots.getValue());
         return timeslots;
     }
 
-    public LiveData<Day> getDay(Date date) {
+    public LiveData<Day> getDay(LocalDate date) {
         return timeslotDao.getDay(date);
     }
 

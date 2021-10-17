@@ -8,6 +8,7 @@ import com.dakotalal.timeapp.R;
 
 import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListActivity;
 import com.dakotalal.timeapp.ui.Timelog.TimelogActivity;
+import com.dakotalal.timeapp.ui.Timelog.TimelogDayFragment;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 
 

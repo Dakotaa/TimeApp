@@ -90,10 +90,10 @@ public class TimeViewModel extends AndroidViewModel {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public LiveData<List<Timeslot>> getCurrentDayTimeslots() {
+    public LiveData<List<Timeslot>> getDayTimeslots(LocalDate date) {
         if (currentDayTimeslots == null) {
             currentDayTimeslots = new MutableLiveData<>();
-            currentDayTimeslots = timeRepository.retrieveDay(LocalDate.now());
+            currentDayTimeslots = timeRepository.retrieveDay(date);
         }
         return currentDayTimeslots;
     }
@@ -114,16 +114,9 @@ public class TimeViewModel extends AndroidViewModel {
         return allDays;
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void getOrCreateCurrentDayTimeslots() {
-        Log.d("TimeViewModel", "getting day");
-        LocalDate date = LocalDate.now();
-        ZoneId zoneId = ZoneId.systemDefault();
-        long start = date.atTime(0, 1).atZone(zoneId).toEpochSecond();
-        long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
-        Log.d("TimeViewModel", "day found, retrieving slots...");
-        currentDayTimeslots = timeRepository.getTimeslots(start, end);
+    public void createToday() {
+        timeRepository.createToday();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -158,8 +151,7 @@ public class TimeViewModel extends AndroidViewModel {
             timeslots.getValue().add(new Timeslot(start, start + 3600));
             start += 3600;
         }
-        Day day = new Day(Date.from(date.atStartOfDay(zoneId).toInstant()));
-        timeRepository.insertDay(day);
+        timeRepository.insertDay(new Day(date));
         timeRepository.insertTimeslots(timeslots.getValue());
         Log.d("TimeViewModel", "Inserting day and timeslots");
         return timeslots;

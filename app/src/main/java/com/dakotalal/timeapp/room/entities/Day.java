@@ -13,18 +13,18 @@ public class Day {
     @PrimaryKey
     @NonNull
     @TypeConverters(DateConverter.class)
-    private Date date;
+    private LocalDate date;
 
-    public Day(@NonNull Date date) {
+    public Day(@NonNull LocalDate date) {
         this.date = date;
     }
 
     @NonNull
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(@NonNull Date date) {
+    public void setDate(@NonNull LocalDate date) {
         this.date = date;
     }
 }

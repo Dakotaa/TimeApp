@@ -5,6 +5,7 @@ import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface TimeslotDao {
 
     @TypeConverters(DateConverter.class)
     @Query("SELECT * from day_table WHERE date = :date")
-    LiveData<Day> getDay(Date date);
+    LiveData<Day> getDay(LocalDate date);
 
     @TypeConverters(DateConverter.class)
     @Query("SELECT * from day_table")
