@@ -21,6 +21,8 @@ import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,8 @@ public class TimelogFragment extends BaseFragment {
 
         // Ensure there's a day created for today
         timeViewModel.createToday();
+        timeViewModel.createDay(LocalDate.now().minusDays(1));
+        // TODO: Create previous days that were missed
 
         timeViewModel.getAllDays().observe(getActivity(), new Observer<List<Day>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -65,11 +69,37 @@ public class TimelogFragment extends BaseFragment {
                     args.putLong(TimelogDayFragment.ARG_DAY_TIMESTAMP, day.getDate().toEpochDay());
                     f.setArguments(args);
                     fragments.add(f);
-
-                    // TODO : Tabs show date
                 }
                 adapter.setDayFragments(fragments);
                 adapter.notifyDataSetChanged();
+
+                // Set the tab labels to the date
+                LocalDate now = LocalDate.now();
+                for (int i = 0; i < days.size(); i++) {
+                    TabLayout.Tab tab = tabLayout.getTabAt(i);
+                    Day date = days.get(i);
+                    if (tab != null && date != null) {
+                        LocalDate d = date.getDate();
+                        String title;
+                        String year = Integer.toString(d.getYear());
+                        String month = Integer.toString(d.getMonthValue());
+                        String day = Integer.toString(d.getDayOfMonth());
+                        // Show the day of the week for the past 7 days
+                        if (d.isAfter(LocalDate.now().minusDays(7))) {
+                            String dayOfWeek = d.getDayOfWeek().toString();
+                            if (d.equals(LocalDate.now())) {
+                                title = MessageFormat.format("Today ({0}/{1}/{2})", day, month, year);
+                            } else if (d.equals(LocalDate.now().minusDays(1))) {
+                                title = MessageFormat.format("Yesterday ({0}/{1}/{2})", day, month, year);
+                            } else {
+                                title = MessageFormat.format("{0} ({1}/{2}/{3})", dayOfWeek, day, month, year);
+                            }
+                        } else { // show only the date for anything further than a week back
+                            title = MessageFormat.format("{0}/{1}/{2}", day, month, year);
+                        }
+                        tab.setText(title);
+                    }
+                }
                 viewPager.setCurrentItem(fragments.size());
 
             }
