@@ -50,11 +50,11 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
         if (args == null) {
-            Log.d("TimelogDayFragment", "args null");
+            //Log.d("TimelogDayFragment", "args null");
             date = LocalDate.now();
         } else {
             long timestamp = args.getLong(ARG_DAY_TIMESTAMP);
-            Log.d("TimelogDayFragment", "timestamp: "  + timestamp);
+            //Log.d("TimelogDayFragment", "timestamp: "  + timestamp);
             date = LocalDate.ofEpochDay(timestamp);
         }
 

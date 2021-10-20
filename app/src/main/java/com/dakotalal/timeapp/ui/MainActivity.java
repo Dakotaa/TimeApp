@@ -19,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.dakotalal.timeapp.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
         NavController navController = Navigation.findNavController(findViewById(R.id.nav_fragment));
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 

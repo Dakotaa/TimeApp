@@ -156,6 +156,12 @@ public class TimeRepository {
         return timeslotDao.getTimeslotsInPeriod(start, finish);
     }
 
+
+    public LiveData<Integer> getActivityCount(String label, long start, long finish) {
+        return timeslotDao.getActivitycount(label, start, finish);
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createToday() {
         createDay(LocalDate.now());
@@ -164,7 +170,7 @@ public class TimeRepository {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Timeslot>> retrieveDay(LocalDate date) {
         createDay(date);
-        Log.d("TimeRepository", "retrieving day...");
+        //Log.d("TimeRepository", "retrieving day...");
         ZoneId zoneId = ZoneId.systemDefault();
         long start = date.atTime(0, 0).atZone(zoneId).toEpochSecond();
         long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
@@ -174,7 +180,7 @@ public class TimeRepository {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Timeslot>> createDay(LocalDate date) {
-        Log.d("TimeRepository", "Creating day");
+        //Log.d("TimeRepository", "Creating day");
         LiveData<List<Timeslot>> timeslots = new MutableLiveData<>(new ArrayList<Timeslot>());
         ZoneId zoneId = ZoneId.systemDefault();
         // create timeslots for the day

@@ -79,7 +79,6 @@ public class TimeViewModel extends AndroidViewModel {
 
     public int getTimeActivityColour(String timeActivityLabel) {
         TimeActivity activity = getTimeActivitiesByLabel().get(timeActivityLabel);
-        //Log.d("TimeViewModel", "activity: " + activity.toString());
         if (activity != null) return activity.getColour();
         return -1;
     }
@@ -119,18 +118,11 @@ public class TimeViewModel extends AndroidViewModel {
         timeRepository.createToday();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public LiveData<List<Timeslot>> getDay(LocalDate date) {
-        ZoneId zoneId = ZoneId.systemDefault();
-        Date d = Date.from(date.atStartOfDay(zoneId).toInstant());
-        if (!allDays.getValue().contains(d)) {
-            return createDay(date);
-        } else {
-            long start = date.atTime(0, 1).atZone(zoneId).toEpochSecond();
-            long end = date.atTime(23, 59).atZone(zoneId).toEpochSecond();
-            return timeRepository.getTimeslots(start, end);
-        }
+
+    public LiveData<Integer> getActivityCount(String activityLabel, long start, long end) {
+        return timeRepository.getActivityCount(activityLabel, start, end);
     }
+
 
     /**
      * Creates the timeslots for a day and inserts them into the database

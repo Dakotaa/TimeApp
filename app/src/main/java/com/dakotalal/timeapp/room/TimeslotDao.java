@@ -55,4 +55,8 @@ public interface TimeslotDao {
     @Query("SELECT * from timeslot_table WHERE start >= :startTime AND start < :endTime " +
             "ORDER BY start ASC")
     LiveData<List<Timeslot>> getTimeslotsInPeriod(long startTime, long endTime);
+
+    @Query("SELECT count(*) from timeslot_table WHERE start >= :startTime AND start < :endTime " +
+            "AND activityLabel LIKE '%' || :label || '%'")
+    LiveData<Integer> getActivitycount(String label, long startTime, long endTime);
 }
