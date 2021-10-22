@@ -1,5 +1,6 @@
 package com.dakotalal.timeapp.ui.Statistics;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -27,25 +28,22 @@ import com.github.mikephil.charting.data.PieEntry;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StatisticsFragment#newInstance} factory method to
+ * Use the {@link PieStatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StatisticsFragment extends Fragment {
+public class PieStatFragment extends Fragment {
+    private static final String ARG_TIMESTAMP_START = "timestampStart";
+    private static final String ARG_TIMESTAMP_END = "timestampEnd";
+    private static final String ARG_LABEL = "label";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private long timestampStart;
+    private long timestampEnd;
+    private String label;
 
     ViewPager2 viewPager;
     private TimeViewModel timeViewModel;
@@ -55,24 +53,24 @@ public class StatisticsFragment extends Fragment {
     PieChart chart;
     List<PieEntry> entries;
 
-    public StatisticsFragment() {
+    public PieStatFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
+     * Factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param timestampStart the first day in the range of stats
+     * @param timestampEnd the last day in the range of stats
      * @return A new instance of fragment StatisticsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static StatisticsFragment newInstance(String param1, String param2) {
-        StatisticsFragment fragment = new StatisticsFragment();
+    public static PieStatFragment newInstance(long timestampStart, long timestampEnd, String label) {
+        PieStatFragment fragment = new PieStatFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putLong(ARG_TIMESTAMP_START, timestampStart);
+        args.putLong(ARG_TIMESTAMP_END, timestampEnd);
+        args.putString(ARG_LABEL, label);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,8 +80,14 @@ public class StatisticsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            timestampStart = getArguments().getLong(ARG_TIMESTAMP_START);
+            timestampEnd = getArguments().getLong(ARG_TIMESTAMP_END);
+            label = getArguments().getString(ARG_LABEL);
+            Log.d("PieStatFragment", "label: " + this.label);
+        } else {    // default to today if no args are found
+            timestampStart = LocalDate.now().toEpochDay();
+            timestampEnd = LocalDate.now().toEpochDay();
+            label = "Today";
         }
     }
 
@@ -91,7 +95,7 @@ public class StatisticsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false);
+        return inflater.inflate(R.layout.fragment_piestat, container, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -100,23 +104,20 @@ public class StatisticsFragment extends Fragment {
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
         viewPager = requireView().findViewById(R.id.timelog_view_pager);
 
-        /*
-        TabLayout tabLayout = requireView().findViewById(R.id.timelog_tab_layout);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText(" " + (position + 1))
-        ).attach();
-         */
-
-        this.startTime = LocalDate.now().minusDays(7).atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
-        this.endTime = LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+        this.startTime = LocalDate.ofEpochDay(timestampStart).atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+        // start of day is used, so to include the last day, a day must be added
+        this.endTime = LocalDate.ofEpochDay(timestampEnd).plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
 
         colours = new ArrayList<>();
 
         chart = requireView().findViewById(R.id.stats_chart_view);
         chart.getLegend().setWordWrapEnabled(true);
+        chart.setDrawRoundedSlices(false);
+        chart.setEntryLabelColor(Color.BLACK);
         entries = new ArrayList<>();
 
+        // This is a horrible approach, but I just wanted to get it working first.
+        // TODO Improve timeslot count retrieval
         timeViewModel.getAllTimeActivities().observe(requireActivity(), new Observer<List<TimeActivity>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -127,16 +128,21 @@ public class StatisticsFragment extends Fragment {
                             @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onChanged(Integer count) {
-                                //Log.d("StatisticsFragment", a.getLabel() + " " + count);
-                                entries.add(new PieEntry(count, a.getLabel()));
-                                colours.add(a.getColour());
-                                updateChart();
+                                if (count > 0) {
+                                    entries.add(new PieEntry(count, a.getLabel()));
+                                    colours.add(a.getColour());
+                                    updateChart();
+                                }
                             }
                         });
                     }
                 }
             }
         });
+    }
+
+    public String getLabel() {
+        return this.label;
     }
 
     public void updateChart() {

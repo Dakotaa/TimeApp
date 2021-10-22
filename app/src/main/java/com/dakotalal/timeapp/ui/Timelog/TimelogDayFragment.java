@@ -27,6 +27,7 @@ import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,8 +35,6 @@ import java.util.List;
  * Activity for filling Timeslots
  */
 public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.OnTimeslotListener {
-    private TimeViewModel timeViewModel;
-    private LocalDate date;
     TimeslotListAdapter adapter;
     public static String ARG_DAY_TIMESTAMP = "timestamp";
 
@@ -49,6 +48,7 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
+        LocalDate date;
         if (args == null) {
             //Log.d("TimelogDayFragment", "args null");
             date = LocalDate.now();
@@ -58,16 +58,25 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
             date = LocalDate.ofEpochDay(timestamp);
         }
 
-        timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
+        TimeViewModel timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
+
+        // Format the header
+        TextView header = requireView().findViewById(R.id.timelog_day_header);
+        String dayOfWeek = date.getDayOfWeek().toString();
+        String month = date.getMonth().toString();
+        String dayNumber = Integer.toString(date.getDayOfMonth());
+        String year = Integer.toString(date.getYear());
+        String dateText = MessageFormat.format("{0} {1} {2}, {3}", dayOfWeek, month, dayNumber, year);
+        header.setText(dateText);
 
         // Setup the adapater for the recyclerview to display the timeslots for this day
         adapter = new TimeslotListAdapter(getActivity(), TimelogDayFragment.this, timeViewModel);
-        RecyclerView recyclerView = getView().findViewById(R.id.fragment_timeslots);
+        RecyclerView recyclerView = requireView().findViewById(R.id.fragment_timeslots);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Observe the activities.
-        timeViewModel.getAllTimeActivities().observe(getActivity(), new Observer<List<TimeActivity>>() {
+        timeViewModel.getAllTimeActivities().observe(requireActivity(), new Observer<List<TimeActivity>>() {
             @Override
             public void onChanged(List<TimeActivity> timeActivities) {
                 adapter.updateTimeActivities();
@@ -75,7 +84,7 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
         });
 
         // Observe the timeslots for this day, so that they may be updated in real time.
-        timeViewModel.getDayTimeslots(date).observe(getActivity(), new Observer<List<Timeslot>>() {
+        timeViewModel.getDayTimeslots(date).observe(requireActivity(), new Observer<List<Timeslot>>() {
             @Override
             public void onChanged(List<Timeslot> timeslots) {
                 adapter.setTimeslots(timeslots);

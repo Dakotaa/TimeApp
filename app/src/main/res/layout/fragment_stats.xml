@@ -4,22 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Statistics.StatisticsFragment"
+    tools:context=".ui.Statistics.StatsFragment"
     android:orientation="vertical"
     app:navGraph="@navigation/nav_graph">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/statistics_tab_layout"
+        android:id="@+id/stats_tab_layout"
         android:background="@color/colorPrimaryLight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/stats_chart_view"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/stats_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
 
-
+    </androidx.viewpager2.widget.ViewPager2>
 
 </LinearLayout>

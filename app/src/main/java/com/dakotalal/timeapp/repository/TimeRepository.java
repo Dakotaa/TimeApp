@@ -161,6 +161,10 @@ public class TimeRepository {
         return timeslotDao.getActivitycount(label, start, finish);
     }
 
+    public LiveData<Integer> getAllActivityCounts(String label, long start, long finish) {
+        return timeslotDao.getActivitycount(label, start, finish);
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createToday() {
