@@ -26,6 +26,12 @@ public interface TimeActivityDao {
     @Query("DELETE FROM activity_table")
     void deleteAll();
 
+    @Query("DELETE FROM activity_table WHERE label LIKE '%' || :label || '%'")
+    void deleteTimeActivity(String label);
+
+    @Query("SELECT * FROM activity_table WHERE label LIKE '%' || :label || '%'")
+    LiveData<List<TimeActivity>> selectTimeActivity(String label);
+
     @Query("SELECT * from activity_table ORDER BY label ASC")
     LiveData<List<TimeActivity>> getAllTimeActivities();
 

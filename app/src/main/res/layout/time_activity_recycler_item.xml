@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
@@ -14,4 +15,27 @@
         tools:ignore="TextContrastCheck"
         tools:text="placeholder text" />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/button_edit_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@null"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintEnd_toStartOf="@+id/button_delete_activity"
+        app:layout_constraintTop_toTopOf="@+id/activity_view"
+        app:layout_constraintBottom_toBottomOf="@id/activity_view"/>
+
+    <ImageButton
+        android:id="@+id/button_delete_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_delete"
+        app:layout_constraintEnd_toEndOf="@+id/activity_view"
+        app:layout_constraintTop_toTopOf="@+id/activity_view"
+        app:layout_constraintBottom_toBottomOf="@id/activity_view"
+        android:onClick="deleteActivity"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

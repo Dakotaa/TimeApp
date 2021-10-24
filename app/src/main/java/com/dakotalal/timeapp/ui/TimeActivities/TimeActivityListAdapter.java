@@ -1,31 +1,43 @@
 package com.dakotalal.timeapp.ui.TimeActivities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
+import com.dakotalal.timeapp.ui.MainActivity;
+import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 
 import java.util.List;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityListAdapter.TimeActivityViewHolder> {
     private final LayoutInflater mInflater;
     private List<TimeActivity> timeActivities; // Cached copy of activity list
     private OnTimeActivityListener onTimeActivityListener;
+    private TimeViewModel timeViewModel;
+    private boolean actionButtons;
 
-    public TimeActivityListAdapter(Context context, OnTimeActivityListener onTimeActivityListener) {
+    public TimeActivityListAdapter(Context context, OnTimeActivityListener onTimeActivityListener, TimeViewModel viewModel, Boolean actionButtons) {
         mInflater = LayoutInflater.from(context);
         this.onTimeActivityListener = onTimeActivityListener;
+        this.timeViewModel = viewModel;
+        this.actionButtons = actionButtons;
     }
 
     @Override
@@ -40,6 +52,30 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
         if (timeActivities != null) {
             TimeActivity current = timeActivities.get(position);
             int colour = current.getColour();
+
+            if (actionButtons) {
+                // TODO implement edit button functionality
+
+                // When the delete button is clicked, bring up a confirmation dialog.
+                // Call to view model to delete the activity if confirmed
+                holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(view.getContext())
+                                .setTitle("Delete " + current.getLabel() + "?")
+                                .setMessage("Deleting an activity will not remove its entries from your timelog, but it will no longer appear in statistics.")
+                                .setPositiveButton("Confirm", (dialog, whichButton) -> {
+                                    timeViewModel.deleteTimeActivity(current);
+                                    Toast.makeText(view.getContext(), current.getLabel() + " deleted!", Toast.LENGTH_SHORT).show();
+                                })
+                                .setNegativeButton("Cancel", null).show();
+                    }
+                });
+            } else {
+                holder.deleteButton.setVisibility(View.INVISIBLE);
+                holder.editButton.setVisibility(View.INVISIBLE);
+            }
+
             holder.timeActivityLabel.setText(current.getLabel());
             holder.timeActivityLabel.setBackgroundColor(colour);
             // set the colour of the text based on the background colour
@@ -55,8 +91,6 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
         notifyDataSetChanged();
     }
 
-    // getItemCount() is called many times, and when it is first called,
-    // mWords has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
         if (timeActivities != null)
@@ -71,10 +105,13 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
     class TimeActivityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView timeActivityLabel;
         OnTimeActivityListener onTimeActivityListener;
+        ImageButton editButton, deleteButton;
 
         private TimeActivityViewHolder(View itemView, OnTimeActivityListener onTimeActivityListener) {
             super(itemView);
             timeActivityLabel = itemView.findViewById(R.id.activity_view);
+            editButton = itemView.findViewById(R.id.button_edit_activity);
+            deleteButton = itemView.findViewById(R.id.button_delete_activity);
             this.onTimeActivityListener = onTimeActivityListener;
             itemView.setOnClickListener(this);
         }
@@ -98,18 +135,6 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
         }
         return Color.rgb(d, d, d);
     }
-
-//    class TimeActivityListener extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        OnTimeActivityListener onTimeActivityListener;
-//
-//        private TimeActivityListener(View itemView, OnTimeActivityListener onTimeActivityListener) {
-//            super(itemView);
-//            this.onTimeActivityListener = onTimeActivityListener;
-//            itemView.setOnClickListener(this);
-//        }
-//
-//
-//    }
 
     public interface OnTimeActivityListener {
         void onTimeActivityClick(int position);

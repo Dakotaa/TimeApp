@@ -13,10 +13,13 @@ public class TimeActivity {
     private String label;
     // the colour that the activity will appear as in the timelog
     private int colour;
+    // the "productivity" rating of the activity. -1 = unproductive, 0 = neutral, 1 = productive
+    private int productivity;
 
-    public TimeActivity(@NonNull String label, int colour) {
+    public TimeActivity(@NonNull String label, int colour, int productivity) {
         this.label = label;
         this.colour = colour;
+        this.productivity = productivity;
     }
 
     public void setLabel(String label) {
@@ -42,5 +45,13 @@ public class TimeActivity {
 
     public void setColour(int colour) {
         this.colour = colour;
+    }
+
+    public int getProductivity() {
+        return productivity;
+    }
+
+    public void setProductivity(int productivity) {
+        this.productivity = productivity;
     }
 }

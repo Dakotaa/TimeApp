@@ -27,4 +27,14 @@
     <string name="nav_timelog_label">Timelog</string>
     <string name="nav_home_label">Home</string>
     <string name="nav_statistics_label">Statistics</string>
+    <string name="productive_activity">Productive Activity</string>
+    <string name="neutral_activity">Neutral Activity</string>
+    <string name="unproductive_activity">Unproductive Activity</string>
+    <string name="productivity_neg_2">-2</string>
+    <string name="productivity_neg_1">-1</string>
+    <string name="productivity_zero">0</string>
+    <string name="productivity_plus_1">+1</string>
+    <string name="productivity_plus_2">+2</string>
+    <string name="label_productivity_score">Productivity Score:</string>
+    <string name="label_colour">Activity Colour:</string>
 </resources>

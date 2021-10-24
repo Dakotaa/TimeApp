@@ -129,10 +129,14 @@ public class TimeRepository {
         }
     }
 
+    public void deleteTimeActivity(TimeActivity timeActivity) {
+        timeActivityDao.deleteTimeActivity(timeActivity.getLabel());
+    }
 
     public void deleteAllTimeActivities() {
         new deleteAllTimeActivitiesAsyncTask(timeActivityDao).execute();
     }
+
 
     private static class deleteAllTimeActivitiesAsyncTask extends AsyncTask<Integer, Void, Void> {
         private TimeActivityDao taDao;

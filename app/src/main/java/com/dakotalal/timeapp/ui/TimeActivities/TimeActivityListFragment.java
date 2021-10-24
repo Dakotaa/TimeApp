@@ -33,7 +33,6 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
     public static final int CREATOR_FRAGMENT = 1;
 
     private FloatingActionButton fabCreate;
-    private FloatingActionButton fabDelete;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,8 +42,11 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // setup and initialize the view model
+        timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
         // initialize the recycler adapter and view to list the activities
-        adapter = new TimeActivityListAdapter(getActivity(), this);
+        adapter = new TimeActivityListAdapter(getActivity(), this, timeViewModel, true);
+
         RecyclerView recyclerView = getView().findViewById(R.id.activity_list_recyclerview);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -57,14 +59,6 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
             frag.show(getFragmentManager().beginTransaction(), "CreateActivityDialog");
         });
 
-//        // initialize the FAB to launch the activity to create TimeActivities
-//        fabDelete= getView().findViewById(R.id.fab_delete_activties);
-//        fabDelete.setOnClickListener(view1 -> {
-//            timeViewModel.deleteAllTimeActivities();
-//        });
-
-        // setup and initialize the view model
-        timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
         // Observe the list of activities
         timeViewModel.getAllTimeActivities().observe(getActivity(), new Observer<List<TimeActivity>>() {
             @Override
@@ -86,7 +80,7 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
 
         if (requestCode == CREATOR_FRAGMENT && resultCode == Activity.RESULT_OK) {
             Bundle bundle = data.getExtras();
-            TimeActivity timeActivity = new TimeActivity(bundle.getString("label", " "), bundle.getInt("colour", 0));
+            TimeActivity timeActivity = new TimeActivity(bundle.getString("label", " "), bundle.getInt("colour", 0), bundle.getInt("score"));
             timeViewModel.insertTimeActivity(timeActivity);
         } else {
             Toast.makeText(getContext(), R.string.activity_not_saved,

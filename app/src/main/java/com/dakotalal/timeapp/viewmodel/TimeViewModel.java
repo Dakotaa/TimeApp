@@ -59,6 +59,10 @@ public class TimeViewModel extends AndroidViewModel {
         timeRepository.insertTimeActivity(timeActivity);
     }
 
+    public void deleteTimeActivity(TimeActivity timeActivity) {
+        timeRepository.deleteTimeActivity(timeActivity);
+    }
+
     public void updateTimeActivity(TimeActivity timeActivity) {
         timeRepository.updateTimeActivity(timeActivity);
     }

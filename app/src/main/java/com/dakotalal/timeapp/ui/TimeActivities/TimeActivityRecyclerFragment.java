@@ -27,4 +27,8 @@ public class TimeActivityRecyclerFragment extends Fragment {
         super.onDestroyView();
     }
 
+    public void deleteActivity() {
+
+    }
+
 }
