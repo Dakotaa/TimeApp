@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,14 +102,32 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         int bgColour;
         int textColour;
         int typeface = Typeface.NORMAL;
+        int scoreIcon = R.drawable.ic_zero;
+        boolean displayScore = true;
 
         if (activityLabel == null) {    // no activity has been set for this timeslot
             label = "No Activity";
-            bgColour = Color.GRAY;
+            bgColour = Color.DKGRAY;
+            displayScore = false;
         } else {    // timeslot has an activity set
             label = activityLabel;
             // get the colour for this activity, and the contrasting text colour
             bgColour = timeViewModel.getTimeActivityColour(activityLabel);
+            // set the score icon
+            switch (timeViewModel.getTimeActivityScore(activityLabel)) {
+                case -2:
+                    scoreIcon = R.drawable.ic_neg_2;
+                    break;
+                case -1:
+                    scoreIcon = R.drawable.ic_neg_1;
+                    break;
+                case +1:
+                    scoreIcon = R.drawable.ic_plus_1;
+                    break;
+                case +2:
+                    scoreIcon = R.drawable.ic_plus_2;
+                    break;
+            }
         }
 
         // Format the timeslot depending on whether it's past/present/future
@@ -120,7 +139,7 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
                 timestamp = MessageFormat.format("{0} - {1}", start, end);
                 label = " ";
                 typeface = Typeface.ITALIC;
-                bgColour = Color.DKGRAY;
+                bgColour = Color.BLACK;
                 holder.setAlterable(false);
             }
         } else {    // Timeslot is in the past
@@ -130,14 +149,20 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         backgroundView.setBackgroundColor(bgColour);
         textColour = TimeActivityListAdapter.getContrastColor(bgColour);
         holder.activityLabel.setText(label);
+        holder.activityLabel.setTextColor(textColour);
         holder.time.setTextColor(textColour);
         holder.time.setTypeface(null, typeface);
         holder.time.setText(timestamp);
+        if (displayScore) {
+            holder.scoreIcon.setImageResource(scoreIcon);
+            holder.scoreIcon.setVisibility(View.VISIBLE);
+        } else holder.scoreIcon.setVisibility(View.INVISIBLE);
     }
 
     class TimeslotViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView time;
         private final TextView activityLabel;
+        private final ImageView scoreIcon;
         OnTimeslotListener onTimeslotListener;
         // Flag for whether this timeslot is alterable (can be clicked and activity can be selected)
         private boolean alterable;
@@ -151,6 +176,7 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
             super(itemView);
             time = itemView.findViewById(R.id.timeslot_time);
             activityLabel = itemView.findViewById(R.id.timeslot_activity);
+            scoreIcon = itemView.findViewById(R.id.score_icon);
             this.onTimeslotListener = onTimeslotListener;
             itemView.setOnClickListener(this);
             alterable = true;

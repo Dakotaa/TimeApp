@@ -59,7 +59,7 @@ public abstract class TimeRoomDatabase extends RoomDatabase {
         // default activity labels, colours, and productivities
         String[] labels = {"Work", "Exercise", "Cooking", "Sleep", "Downtime", "Gaming", "School"};
         int[] colours = {Color.RED, Color.MAGENTA, Color.CYAN, Color.GRAY, Color.LTGRAY, Color.YELLOW, Color.BLUE};
-        int[] productivities = {1, 1, 1, 0, -1, -1, 1};
+        int[] productivities = {2, 2, 1, 0, -2, -1, 2};
 
         PopulateDbAsync(TimeRoomDatabase db) {
             aDao = db.timeActivityDao();

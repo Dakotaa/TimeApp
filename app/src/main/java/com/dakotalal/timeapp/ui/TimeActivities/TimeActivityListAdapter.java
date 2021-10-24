@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,8 +77,24 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
                 holder.editButton.setVisibility(View.INVISIBLE);
             }
 
+            switch (current.getProductivity()) {
+                case -2:
+                    holder.scoreIcon.setImageResource(R.drawable.ic_neg_2);
+                    break;
+                case -1:
+                    holder.scoreIcon.setImageResource(R.drawable.ic_neg_1);
+                    break;
+                case +1:
+                    holder.scoreIcon.setImageResource(R.drawable.ic_plus_1);
+                    break;
+                case +2:
+                    holder.scoreIcon.setImageResource(R.drawable.ic_plus_2);
+                    break;
+            }
+
             holder.timeActivityLabel.setText(current.getLabel());
             holder.timeActivityLabel.setBackgroundColor(colour);
+            holder.background.setBackgroundColor(colour);
             // set the colour of the text based on the background colour
             holder.timeActivityLabel.setTextColor(getContrastColor(colour));
         } else {
@@ -104,14 +121,18 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
 
     class TimeActivityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView timeActivityLabel;
+        private final TextView background;
+        private final ImageView scoreIcon;
         OnTimeActivityListener onTimeActivityListener;
         ImageButton editButton, deleteButton;
 
         private TimeActivityViewHolder(View itemView, OnTimeActivityListener onTimeActivityListener) {
             super(itemView);
-            timeActivityLabel = itemView.findViewById(R.id.activity_view);
+            timeActivityLabel = itemView.findViewById(R.id.activity_label_text);
+            background = itemView.findViewById(R.id.activity_view);
             editButton = itemView.findViewById(R.id.button_edit_activity);
             deleteButton = itemView.findViewById(R.id.button_delete_activity);
+            scoreIcon = itemView.findViewById(R.id.score_icon);
             this.onTimeActivityListener = onTimeActivityListener;
             itemView.setOnClickListener(this);
         }

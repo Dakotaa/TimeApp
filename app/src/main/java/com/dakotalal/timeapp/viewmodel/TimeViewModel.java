@@ -81,6 +81,12 @@ public class TimeViewModel extends AndroidViewModel {
         } else return null;
     }
 
+    public int getTimeActivityScore(String timeActivityLabel) {
+        TimeActivity activity = getTimeActivitiesByLabel().get(timeActivityLabel);
+        if (activity != null) return activity.getProductivity();
+        return -1;
+    }
+
     public int getTimeActivityColour(String timeActivityLabel) {
         TimeActivity activity = getTimeActivitiesByLabel().get(timeActivityLabel);
         if (activity != null) return activity.getColour();

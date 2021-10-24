@@ -10,9 +10,28 @@
     <TextView
         android:id="@+id/activity_view"
         style="@style/text_view_style"
+        android:background="#00FFFFFF"
         android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/score_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_zero"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/activity_view"
+        app:layout_constraintTop_toTopOf="@id/activity_view"
+        app:layout_constraintEnd_toStartOf="@id/activity_label_text"
+        app:layout_constraintStart_toStartOf="@id/activity_view"/>
+
+    <TextView
+        android:id="@+id/activity_label_text"
+        style="@style/text_view_style"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         tools:ignore="TextContrastCheck"
+        app:layout_constraintStart_toEndOf="@id/score_icon"
         tools:text="placeholder text" />
 
     <ImageButton
