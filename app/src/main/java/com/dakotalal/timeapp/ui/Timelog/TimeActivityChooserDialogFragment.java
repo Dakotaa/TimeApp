@@ -45,7 +45,7 @@ public class TimeActivityChooserDialogFragment extends DialogFragment implements
         View v = inflater.inflate(R.layout.activity_select_time_activity, container, false);
         //getDialog().setTitle("Select Activity");
         recyclerView = v.findViewById(R.id.activity_list_recyclerview);
-        adapter = new TimeActivityListAdapter(getActivity(), this, timeViewModel, false);
+        adapter = new TimeActivityListAdapter(getActivity(), this, timeViewModel, false, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         // setup and initialize the view model

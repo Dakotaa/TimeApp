@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,9 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
     private AppBarConfiguration appBarConfiguration;
     private TimeViewModel timeViewModel;
     TimeActivityListAdapter adapter;
+    private List<TimeActivity> timeActivities;
     public static final int CREATOR_FRAGMENT = 1;
+    public static final int EDITOR_FRAGMENT = 2;
 
     private FloatingActionButton fabCreate;
 
@@ -45,7 +48,7 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
         // setup and initialize the view model
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
         // initialize the recycler adapter and view to list the activities
-        adapter = new TimeActivityListAdapter(getActivity(), this, timeViewModel, true);
+        adapter = new TimeActivityListAdapter(getActivity(), this, timeViewModel, true, this);
 
         RecyclerView recyclerView = getView().findViewById(R.id.activity_list_recyclerview);
         recyclerView.setAdapter(adapter);
@@ -65,6 +68,7 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
             public void onChanged(@Nullable final List<TimeActivity> timeActivities) {
                 // Update the cached copy of the activities in the adapter.
                 adapter.setTimeActivities(timeActivities);
+                TimeActivityListFragment.this.timeActivities = timeActivities;
             }
         });
     }
@@ -78,13 +82,36 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CREATOR_FRAGMENT && resultCode == Activity.RESULT_OK) {
-            Bundle bundle = data.getExtras();
-            TimeActivity timeActivity = new TimeActivity(bundle.getString("label", " "), bundle.getInt("colour", 0), bundle.getInt("score"));
-            timeViewModel.insertTimeActivity(timeActivity);
-        } else {
-            Toast.makeText(getContext(), R.string.activity_not_saved,
-                    Toast.LENGTH_LONG).show();
+        if (requestCode == CREATOR_FRAGMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle bundle = data.getExtras();
+                String label = bundle.getString("label", "");
+                for (TimeActivity a : timeActivities) {
+                    if (a.getLabel().equals(label)) {
+                        Toast.makeText(getContext(), R.string.activity_already_exists,
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                TimeActivity timeActivity = new TimeActivity(label, bundle.getInt("colour", 0), bundle.getInt("score"));
+                timeViewModel.insertTimeActivity(timeActivity);
+                Toast.makeText(getContext(), R.string.activity_created,
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), R.string.activity_not_saved,
+                        Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == EDITOR_FRAGMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle bundle = data.getExtras();
+                TimeActivity timeActivity = new TimeActivity(bundle.getString("label", " "), bundle.getInt("colour", 0), bundle.getInt("score"));
+                timeViewModel.updateTimeActivity(timeActivity);
+                Toast.makeText(getContext(), R.string.activity_updated,
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), R.string.activity_not_saved,
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
 

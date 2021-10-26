@@ -14,7 +14,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Timeslot.class, TimeActivity.class, Day.class}, version = 3, exportSchema = false)
+@Database(entities = {Timeslot.class, TimeActivity.class, Day.class}, version = 5, exportSchema = false)
 public abstract class TimeRoomDatabase extends RoomDatabase {
 
     public abstract TimeslotDao timeSlotDao();
@@ -57,9 +57,9 @@ public abstract class TimeRoomDatabase extends RoomDatabase {
         private final TimeActivityDao aDao;
 
         // default activity labels, colours, and productivities
-        String[] labels = {"Work", "Exercise", "Cooking", "Sleep", "Downtime", "Gaming", "School"};
-        int[] colours = {Color.RED, Color.MAGENTA, Color.CYAN, Color.GRAY, Color.LTGRAY, Color.YELLOW, Color.BLUE};
-        int[] productivities = {2, 2, 1, 0, -2, -1, 2};
+        String[] labels = {"Work", "Exercise", "Cooking", "Sleep", "Downtime", "Gaming", "School", "Wasted Time"};
+        int[] colours = {Color.RED, Color.MAGENTA, Color.CYAN, Color.GRAY, Color.GREEN, Color.YELLOW, Color.BLUE, Color.LTGRAY};
+        int[] productivities = {2, 2, 1, 0, -1, -1, 2, -2};
 
         PopulateDbAsync(TimeRoomDatabase db) {
             aDao = db.timeActivityDao();

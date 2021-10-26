@@ -92,21 +92,7 @@ public class TimeRepository {
     Updates the given activity in the database.
      */
     public void updateTimeActivity(TimeActivity timeActivity) {
-        new updateTimeActivityAsyncTask(timeActivityDao).execute(timeActivity);
-    }
-
-    private static class updateTimeActivityAsyncTask extends AsyncTask<TimeActivity, Void, Void> {
-        private TimeActivityDao taDao;
-
-        updateTimeActivityAsyncTask(TimeActivityDao dao) {
-            taDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final TimeActivity... params) {
-            taDao.update(params[0]);
-            return null;
-        }
+        timeActivityDao.update(timeActivity);
     }
 
 
@@ -192,10 +178,12 @@ public class TimeRepository {
         LiveData<List<Timeslot>> timeslots = new MutableLiveData<>(new ArrayList<Timeslot>());
         ZoneId zoneId = ZoneId.systemDefault();
         // create timeslots for the day
+        int timeSlots = 48;
+        int intervalLength = (86400/timeSlots);
         long start = date.atTime(0, 0).atZone(zoneId).toEpochSecond();
-        for (int i = 0; i < 24; i++) {
-            timeslots.getValue().add(new Timeslot(start, start + 3600));
-            start += 3600;
+        for (int i = 0; i < timeSlots; i++) {
+            timeslots.getValue().add(new Timeslot(start, start + intervalLength));
+            start += intervalLength;
         }
         insertDay(new Day(date));
         insertTimeslots(timeslots.getValue());

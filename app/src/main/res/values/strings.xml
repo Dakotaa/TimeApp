@@ -37,4 +37,7 @@
     <string name="productivity_plus_2">+2</string>
     <string name="label_productivity_score">Productivity Score:</string>
     <string name="label_colour">Activity Colour:</string>
+    <string name="activity_updated">Activity Updated</string>
+    <string name="activity_created">Activity Created</string>
+    <string name="activity_already_exists">Activity already exists!</string>
 </resources>

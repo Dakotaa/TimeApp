@@ -1,5 +1,6 @@
 package com.dakotalal.timeapp.ui.Statistics;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,9 +22,12 @@ import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -50,6 +54,7 @@ public class PieStatFragment extends Fragment {
     private long startTime;
     private long endTime;
     private ArrayList<Integer> colours;
+    private ValueFormatter formatter;
     PieChart chart;
     List<PieEntry> entries;
 
@@ -116,6 +121,16 @@ public class PieStatFragment extends Fragment {
         chart.setEntryLabelColor(Color.BLACK);
         entries = new ArrayList<>();
 
+        formatter = new ValueFormatter() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                String rounded = String.format("%.1f", value);
+                return  rounded + " hours";
+
+            }
+        };
+
         // This is a horrible approach, but I just wanted to get it working first.
         // TODO Improve timeslot count retrieval
         timeViewModel.getAllTimeActivities().observe(requireActivity(), new Observer<List<TimeActivity>>() {
@@ -129,7 +144,7 @@ public class PieStatFragment extends Fragment {
                             @Override
                             public void onChanged(Integer count) {
                                 if (count > 0) {
-                                    entries.add(new PieEntry(count, a.getLabel()));
+                                    entries.add(new PieEntry((float) count / 2, a.getLabel()));
                                     colours.add(a.getColour());
                                     updateChart();
                                 }
@@ -148,6 +163,7 @@ public class PieStatFragment extends Fragment {
     public void updateChart() {
         Log.d("StatisticsFragment", "Updating chart");
         PieDataSet dataSet = new PieDataSet(entries, "Activities");
+        dataSet.setValueFormatter(formatter);
         dataSet.setColors(colours);
         PieData d = new PieData(dataSet);
         d.setValueTextSize(10.0f);

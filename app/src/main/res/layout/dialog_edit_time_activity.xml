@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorScreenBackground"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:id="@+id/create_time_activity">
+
+    <TextView
+        android:id="@+id/label_productivity_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_productivity_score"
+        android:layout_below="@id/edit_activity_label"
+        />
+
+    <RadioGroup
+        android:id="@+id/productivity_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/label_productivity_score"
+        android:gravity="center">
+
+        <RadioButton
+            android:id="@+id/productivity_neg_2"
+            android:text="@string/productivity_neg_2"
+            android:layout_width="wrap_content"
+            android:textColor="#E91E25"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/productivity_score_button_padding"/>
+        <RadioButton
+            android:id="@+id/productivity_neg_1"
+            android:text="@string/productivity_neg_1"
+            android:layout_width="wrap_content"
+            android:textColor="#FF9800"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/productivity_score_button_padding"/>
+        <RadioButton
+            android:id="@+id/productivity_zero"
+            android:text="@string/productivity_zero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/productivity_score_button_padding"/>
+        <RadioButton
+            android:id="@+id/productivity_plus_1"
+            android:text="@string/productivity_plus_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#379F0B"
+            android:layout_marginHorizontal="@dimen/productivity_score_button_padding"/>
+        <RadioButton
+            android:id="@+id/productivity_plus_2"
+            android:text="@string/productivity_plus_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#97FB60"
+            android:layout_marginHorizontal="@dimen/productivity_score_button_padding"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/label_colour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_colour"
+        android:layout_below="@id/productivity_buttons"
+        />
+
+    <com.skydoves.colorpickerview.ColorPickerView
+        android:id="@+id/color_picker"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@id/label_colour" />
+
+
+</RelativeLayout>

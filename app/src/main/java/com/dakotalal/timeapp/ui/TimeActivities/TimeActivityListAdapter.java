@@ -1,10 +1,14 @@
 package com.dakotalal.timeapp.ui.TimeActivities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,9 @@ import java.util.List;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,13 +39,17 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
     private List<TimeActivity> timeActivities; // Cached copy of activity list
     private OnTimeActivityListener onTimeActivityListener;
     private TimeViewModel timeViewModel;
+    private Context context;
+    private Fragment fragment;
     private boolean actionButtons;
 
-    public TimeActivityListAdapter(Context context, OnTimeActivityListener onTimeActivityListener, TimeViewModel viewModel, Boolean actionButtons) {
+    public TimeActivityListAdapter(Context context, OnTimeActivityListener onTimeActivityListener, TimeViewModel viewModel, Boolean actionButtons, Fragment fragment) {
         mInflater = LayoutInflater.from(context);
+        this.context = context;
         this.onTimeActivityListener = onTimeActivityListener;
         this.timeViewModel = viewModel;
         this.actionButtons = actionButtons;
+        this.fragment = fragment;
     }
 
     @Override
@@ -53,21 +64,35 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
         if (timeActivities != null) {
             TimeActivity current = timeActivities.get(position);
             int colour = current.getColour();
+            int score = current.getProductivity();
+            String label = current.getLabel();
 
             if (actionButtons) {
                 // TODO implement edit button functionality
-
+                holder.editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DialogFragment frag = new EditTimeActivityDialogFragment();
+                        frag.setTargetFragment(fragment, TimeActivityListFragment.EDITOR_FRAGMENT);
+                        Bundle args = new Bundle();
+                        args.putString("label", label);
+                        args.putInt("colour", colour);
+                        args.putInt("score", score);
+                        frag.setArguments(args);
+                        frag.show(fragment.getFragmentManager(), "Edit Time Activity");
+                    }
+                });
                 // When the delete button is clicked, bring up a confirmation dialog.
                 // Call to view model to delete the activity if confirmed
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         new AlertDialog.Builder(view.getContext())
-                                .setTitle("Delete " + current.getLabel() + "?")
+                                .setTitle("Delete " + label + "?")
                                 .setMessage("Deleting an activity will not remove its entries from your timelog, but it will no longer appear in statistics.")
                                 .setPositiveButton("Confirm", (dialog, whichButton) -> {
                                     timeViewModel.deleteTimeActivity(current);
-                                    Toast.makeText(view.getContext(), current.getLabel() + " deleted!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(view.getContext(), label + " deleted!", Toast.LENGTH_SHORT).show();
                                 })
                                 .setNegativeButton("Cancel", null).show();
                     }
@@ -92,7 +117,7 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
                     break;
             }
 
-            holder.timeActivityLabel.setText(current.getLabel());
+            holder.timeActivityLabel.setText(label);
             holder.timeActivityLabel.setBackgroundColor(colour);
             holder.background.setBackgroundColor(colour);
             // set the colour of the text based on the background colour

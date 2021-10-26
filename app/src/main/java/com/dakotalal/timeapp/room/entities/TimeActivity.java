@@ -6,9 +6,8 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "activity_table")
 public class TimeActivity {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @NonNull
-    private int id;
     // the text label of the activity
     private String label;
     // the colour that the activity will appear as in the timelog
@@ -24,14 +23,6 @@ public class TimeActivity {
 
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     @NonNull
