@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,13 +55,25 @@ public class TimelogFragment extends BaseFragment {
 
         // Ensure there's a day created for today
         timeViewModel.createToday();
-        timeViewModel.createDay(LocalDate.now().minusDays(1));
-        // TODO: Create previous days that were missed
 
         timeViewModel.getAllDays().observe(requireActivity(), new Observer<List<Day>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChanged(List<Day> days) {
+                // create all uncreated days since the last day
+                if (days.size() > 1) {
+                    LocalDate current = days.get(days.size()-1).getDate();
+                    LocalDate prev = days.get(days.size()-2).getDate();
+                    // while the day before the current date doesn't have the proper date, create
+                    // a new day with the proper date
+                    while (!prev.equals(current.minusDays(1))) {
+                        LocalDate newDate = current.minusDays(1);
+                        Log.d("TimelogFragment", "Creating day " + newDate.toString());
+                        timeViewModel.createDay(newDate);
+                        current = newDate;
+                    }
+                }
+
                 List<TimelogDayFragment> fragments = new ArrayList<>();
                 for (int i = 0; i < days.size(); i++) {
                     TimelogDayFragment f = new TimelogDayFragment();

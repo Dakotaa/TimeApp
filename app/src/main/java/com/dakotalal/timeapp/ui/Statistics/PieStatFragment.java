@@ -126,7 +126,7 @@ public class PieStatFragment extends Fragment {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
                 String rounded = String.format("%.1f", value);
-                return  rounded + " hours";
+                return rounded + " hours";
 
             }
         };
@@ -166,6 +166,7 @@ public class PieStatFragment extends Fragment {
         dataSet.setValueFormatter(formatter);
         dataSet.setColors(colours);
         PieData d = new PieData(dataSet);
+        d.setValueFormatter(formatter);
         d.setValueTextSize(10.0f);
         chart.setData(d);
         chart.invalidate();
