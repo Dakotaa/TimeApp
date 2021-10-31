@@ -24,4 +24,9 @@
         android:name="com.dakotalal.timeapp.ui.Statistics.StatsFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_stats" />
+    <fragment
+        android:id="@+id/nav_goals"
+        android:name="com.dakotalal.timeapp.ui.Goals.GoalsFragment"
+        android:label="fragment_goals"
+        tools:layout="@layout/fragment_goals" />
 </navigation>

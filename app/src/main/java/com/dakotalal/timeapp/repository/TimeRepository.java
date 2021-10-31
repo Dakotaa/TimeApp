@@ -40,6 +40,10 @@ public class TimeRepository {
         return this.allTimeActivities;
     }
 
+    public LiveData<List<TimeActivity>> getMostCommonTimeActivities(long since) {
+        return timeslotDao.getMostCommonTimeActivities(since);
+    }
+
     public LiveData<List<Timeslot>> getActiveTimeslots() {
         return activeTimeslots;
     }

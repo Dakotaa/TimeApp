@@ -40,6 +40,7 @@ public interface TimeslotDao {
     @Update
     void update(Timeslot timeslot);
 
+
     // Get the TimeSlot that the given time occurs in
 
     @Query("SELECT * from timeslot_table WHERE start >= :time AND :time < finish")
@@ -49,6 +50,10 @@ public interface TimeslotDao {
 
     @Query("SELECT * from timeslot_table")
     LiveData<List<Timeslot>> getAllTimeslots();
+
+    // get time activities ordered by how common they are, since the given time
+    @Query("SELECT * FROM activity_table INNER JOIN timeslot_table ON activity_table.label=timeslot_table.activityLabel WHERE start >= :time GROUP BY activityLabel ORDER BY COUNT(activityLabel) DESC")
+    LiveData<List<TimeActivity>> getMostCommonTimeActivities(long time);
 
 
     // Get a LiveData List of Timeslots between the given start and end times

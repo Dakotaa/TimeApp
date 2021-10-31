@@ -17,6 +17,7 @@ import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListAdapter;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class TimeActivityChooserDialogFragment extends DialogFragment implements
         this.timeslot = timeslot;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceBundle) {
         View v = inflater.inflate(R.layout.activity_select_time_activity, container, false);
@@ -51,7 +53,7 @@ public class TimeActivityChooserDialogFragment extends DialogFragment implements
         // setup and initialize the view model
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
         // Observe the list of activities
-        timeViewModel.getAllTimeActivities().observe(this, new Observer<List<TimeActivity>>() {
+        timeViewModel.getMostCommonTimeActivities(LocalDate.now().minusDays(7).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).observe(this, new Observer<List<TimeActivity>>() {
             @Override
             public void onChanged(@Nullable final List<TimeActivity> timeActivities) {
                 // Update the cached copy of the activities in the adapter.
@@ -60,7 +62,7 @@ public class TimeActivityChooserDialogFragment extends DialogFragment implements
         });
         return v;
     }
-
+    
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onTimeActivityClick(int position) {

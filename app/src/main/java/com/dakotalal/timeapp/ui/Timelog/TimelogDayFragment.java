@@ -37,6 +37,8 @@ import java.util.List;
 public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.OnTimeslotListener {
     TimeslotListAdapter adapter;
     public static String ARG_DAY_TIMESTAMP = "timestamp";
+    public TextView score;
+    public TimeViewModel timeViewModel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -58,7 +60,9 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
             date = LocalDate.ofEpochDay(timestamp);
         }
 
-        TimeViewModel timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
+        timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
+
+        score = requireView().findViewById(R.id.timelog_day_score);
 
         // Format the header
         TextView header = requireView().findViewById(R.id.timelog_day_header);
@@ -69,27 +73,27 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
         String dateText = MessageFormat.format("{0} {1} {2}, {3}", dayOfWeek, month, dayNumber, year);
         header.setText(dateText);
 
-        // Setup the adapater for the recyclerview to display the timeslots for this day
+        // Setup the adapter for the recyclerview to display the timeslots for this day
         adapter = new TimeslotListAdapter(getActivity(), TimelogDayFragment.this, timeViewModel);
         RecyclerView recyclerView = requireView().findViewById(R.id.fragment_timeslots);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Observe the activities.
-        timeViewModel.getAllTimeActivities().observe(requireActivity(), new Observer<List<TimeActivity>>() {
-            @Override
-            public void onChanged(List<TimeActivity> timeActivities) {
-                adapter.updateTimeActivities();
-            }
-        });
+        timeViewModel.getAllTimeActivities().observe(requireActivity(), timeActivities -> adapter.updateTimeActivities());
 
         // Observe the timeslots for this day, so that they may be updated in real time.
-        timeViewModel.getDayTimeslots(date).observe(requireActivity(), new Observer<List<Timeslot>>() {
-            @Override
-            public void onChanged(List<Timeslot> timeslots) {
-                adapter.setTimeslots(timeslots);
-                Log.d("TimelogActivity", "Got timeslots for day");
+        timeViewModel.getDayTimeslots(date).observe(requireActivity(), timeslots -> {
+            adapter.setTimeslots(timeslots);
+
+            double scoreVal = 0;
+            for (Timeslot t : timeslots) {
+                if (t.getActivityLabel() != null) {
+                    scoreVal += timeViewModel.getTimeActivityScore(t.getActivityLabel()) / 2.0;
+                }
             }
+            TimelogDayFragment.this.score.setText("Score: " + scoreVal);
+
         });
     }
 

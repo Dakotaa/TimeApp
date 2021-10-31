@@ -30,7 +30,6 @@ public class TimeViewModel extends AndroidViewModel {
     private TimeRepository timeRepository;
     private LiveData<List<TimeActivity>> allTimeActivities;
     private LiveData<List<Day>> allDays;
-    private MutableLiveData<LocalDate> currentDay;
     private LiveData<List<Timeslot>> currentDayTimeslots;
     private Hashtable<String, TimeActivity> timeActivitiesByLabel;
 
@@ -46,7 +45,7 @@ public class TimeViewModel extends AndroidViewModel {
         if (timeActivitiesByLabel == null) {
             // keep all the activities in a hashtable, keyed by label, so they can be retrieved from just the label name
             timeActivitiesByLabel = new Hashtable<>();
-            if (allTimeActivities.getValue() != null) {
+            if (allTimeActivities != null) {
                 for (TimeActivity t : allTimeActivities.getValue()) {
                     timeActivitiesByLabel.put(t.getLabel(), t);
                 }
@@ -81,6 +80,7 @@ public class TimeViewModel extends AndroidViewModel {
         } else return null;
     }
 
+
     public int getTimeActivityScore(String timeActivityLabel) {
         TimeActivity activity = getTimeActivitiesByLabel().get(timeActivityLabel);
         if (activity != null) return activity.getProductivity();
@@ -113,6 +113,10 @@ public class TimeViewModel extends AndroidViewModel {
             allTimeActivities = timeRepository.getAllTimeActivities();
         }
         return this.allTimeActivities;
+    }
+
+    public LiveData<List<TimeActivity>> getMostCommonTimeActivities(long since) {
+        return timeRepository.getMostCommonTimeActivities(since);
     }
 
     public LiveData<List<Day>> getAllDays() {

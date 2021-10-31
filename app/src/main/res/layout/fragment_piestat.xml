@@ -8,18 +8,19 @@
     android:orientation="vertical"
     app:navGraph="@navigation/nav_graph">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/statistics_tab_layout"
-        android:background="@color/colorPrimaryLight"
+
+    <TextView
+        android:id="@+id/piestats_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryLight"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textSize="15sp"/>
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/stats_chart_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-
-
-
 </LinearLayout>

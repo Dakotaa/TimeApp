@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
@@ -55,6 +56,7 @@ public class PieStatFragment extends Fragment {
     private long endTime;
     private ArrayList<Integer> colours;
     private ValueFormatter formatter;
+    TextView header;
     PieChart chart;
     List<PieEntry> entries;
 
@@ -88,7 +90,6 @@ public class PieStatFragment extends Fragment {
             timestampStart = getArguments().getLong(ARG_TIMESTAMP_START);
             timestampEnd = getArguments().getLong(ARG_TIMESTAMP_END);
             label = getArguments().getString(ARG_LABEL);
-            Log.d("PieStatFragment", "label: " + this.label);
         } else {    // default to today if no args are found
             timestampStart = LocalDate.now().toEpochDay();
             timestampEnd = LocalDate.now().toEpochDay();
@@ -114,6 +115,9 @@ public class PieStatFragment extends Fragment {
         this.endTime = LocalDate.ofEpochDay(timestampEnd).plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
 
         colours = new ArrayList<>();
+
+        header = requireView().findViewById(R.id.piestats_header);
+        header.setText(label);
 
         chart = requireView().findViewById(R.id.stats_chart_view);
         chart.getLegend().setWordWrapEnabled(true);
@@ -161,7 +165,6 @@ public class PieStatFragment extends Fragment {
     }
 
     public void updateChart() {
-        Log.d("StatisticsFragment", "Updating chart");
         PieDataSet dataSet = new PieDataSet(entries, "Activities");
         dataSet.setValueFormatter(formatter);
         dataSet.setColors(colours);

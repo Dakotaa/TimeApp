@@ -40,4 +40,5 @@
     <string name="activity_updated">Activity Updated</string>
     <string name="activity_created">Activity Created</string>
     <string name="activity_already_exists">Activity already exists!</string>
+    <string name="nav_goals_label">Goals</string>
 </resources>
