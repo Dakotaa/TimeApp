@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,10 +36,10 @@ public class TimeActivityChooserDialogFragment extends DialogFragment implements
     RecyclerView recyclerView;
     TimeActivityListAdapter adapter;
     TimeViewModel timeViewModel;
-    Timeslot timeslot;
+    List<Timeslot> timeslots;
 
-    public TimeActivityChooserDialogFragment(Timeslot timeslot) {
-        this.timeslot = timeslot;
+    public TimeActivityChooserDialogFragment(ArrayList<Timeslot> timeslots) {
+        this.timeslots = timeslots;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -67,10 +68,10 @@ public class TimeActivityChooserDialogFragment extends DialogFragment implements
     @Override
     public void onTimeActivityClick(int position) {
         TimeActivity activity = adapter.getTimeActivityAtPosition(position);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String start = Instant.ofEpochSecond(timeslot.getTimeStart()).atZone(ZoneId.systemDefault()).format(formatter);
-        timeslot.setActivityLabel(activity.getLabel());
-        timeViewModel.updateTimeslot(timeslot);
+        for (Timeslot t : timeslots) {
+            t.setActivityLabel(activity.getLabel());
+            timeViewModel.updateTimeslot(t);
+        }
         this.dismiss();
     }
 }

@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,7 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.RequiresApi;
@@ -31,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapter.TimeslotViewHolder> {
     private final LayoutInflater inflater;
     private List<Timeslot> timeslots;
+    private ArrayList<Timeslot> checkedTimeslots;
     private OnTimeslotListener onTimeslotListener;
     private TimeViewModel timeViewModel;
 
@@ -38,6 +43,7 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         inflater = LayoutInflater.from(context);
         this.onTimeslotListener = onTimeslotListener;
         this.timeViewModel = timeViewModel;
+        checkedTimeslots = new ArrayList<>();
     }
 
     @Override
@@ -94,9 +100,9 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         // Format the activity label and colour the timeslot based on the activity colour
         String activityLabel = timeslot.getActivityLabel();
         View backgroundView = holder.itemView.findViewById(R.id.timeslot_background);
-
         holder.setAlterable(true);
-
+        holder.checkbox.setVisibility(View.VISIBLE);
+        holder.bind(timeslot);
         String timestamp;
         String label;
         int bgColour;
@@ -104,7 +110,7 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         int typeface = Typeface.NORMAL;
         int scoreIcon = R.drawable.ic_zero;
         boolean displayScore = true;
-
+        // get activity info
         if (activityLabel == null) {    // no activity has been set for this timeslot
             label = "No Activity";
             bgColour = Color.DKGRAY;
@@ -129,7 +135,6 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
                     break;
             }
         }
-
         // Format the timeslot depending on whether it's past/present/future
         if (timeEnd > now) {
             if (timeStart < now) {   // Timeslot is the current timeslot
@@ -141,6 +146,7 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
                 typeface = Typeface.ITALIC;
                 bgColour = Color.BLACK;
                 holder.setAlterable(false);
+                holder.checkbox.setVisibility(View.INVISIBLE);
             }
         } else {    // Timeslot is in the past
             timestamp = MessageFormat.format("{0} - {1}", start, end);
@@ -159,10 +165,22 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         } else holder.scoreIcon.setVisibility(View.INVISIBLE);
     }
 
+
+    public ArrayList<Timeslot> getCheckedTimeslots() {
+        return checkedTimeslots;
+    }
+
+    public void clearCheckedTimeslots() {
+        this.checkedTimeslots = new ArrayList<>();
+    }
+
     class TimeslotViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView time;
         private final TextView activityLabel;
         private final ImageView scoreIcon;
+        private final CheckBox checkbox;
+        private boolean checked;
+        private Timeslot timeslot;
         OnTimeslotListener onTimeslotListener;
         // Flag for whether this timeslot is alterable (can be clicked and activity can be selected)
         private boolean alterable;
@@ -177,13 +195,35 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
             time = itemView.findViewById(R.id.timeslot_time);
             activityLabel = itemView.findViewById(R.id.timeslot_activity);
             scoreIcon = itemView.findViewById(R.id.score_icon);
+            checkbox = itemView.findViewById(R.id.timeslot_checkbox);
+            checked = false;
             this.onTimeslotListener = onTimeslotListener;
             itemView.setOnClickListener(this);
             alterable = true;
+
+            // listen for checkbox changes
+            checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    checkbox.setChecked(true);
+                    checkedTimeslots.add(this.timeslot);
+                    onTimeslotListener.setButtonVisible(true);
+                } else {
+                    checkbox.setChecked(false);
+                    checkedTimeslots.remove(this.timeslot);
+                    if (checkedTimeslots.isEmpty()) {
+                        onTimeslotListener.setButtonVisible(false);
+                    }
+                }
+            });
         }
 
         public void setAlterable(boolean alterable) {
             this.alterable = alterable;
+        }
+
+        void bind(Timeslot timeslot) {
+            this.timeslot = timeslot;
+            checkbox.setChecked(checkedTimeslots.contains(timeslot));
         }
 
         /**
@@ -193,7 +233,6 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
          */
         @Override
         public void onClick(View view) {
-            Log.d("TimeslotListAdapter", "Alterable: " + alterable);
             if (alterable) {
                 onTimeslotListener.onTimeslotClick(getAdapterPosition());
             } else {
@@ -202,7 +241,10 @@ public class TimeslotListAdapter extends RecyclerView.Adapter<TimeslotListAdapte
         }
     }
 
+
+
     public interface OnTimeslotListener {
         void onTimeslotClick(int position);
+        void setButtonVisible(boolean b);
     }
 }

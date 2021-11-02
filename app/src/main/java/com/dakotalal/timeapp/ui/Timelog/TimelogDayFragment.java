@@ -1,44 +1,38 @@
 package com.dakotalal.timeapp.ui.Timelog;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dakotalal.timeapp.R;
-import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Activity for filling Timeslots
  */
 public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.OnTimeslotListener {
-    TimeslotListAdapter adapter;
     public static String ARG_DAY_TIMESTAMP = "timestamp";
     public TextView score;
     public TimeViewModel timeViewModel;
+    public Button setAllButton;
+    TimeslotListAdapter adapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -63,7 +57,16 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
 
         score = requireView().findViewById(R.id.timelog_day_score);
-
+        setAllButton = requireView().findViewById(R.id.button_set_multiple);
+        setAllButton.setVisibility(View.INVISIBLE);
+        setAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimeActivitySelectorDialog(adapter.getCheckedTimeslots());
+                adapter.clearCheckedTimeslots();
+                setButtonVisible(false);
+            }
+        });
         // Format the header
         TextView header = requireView().findViewById(R.id.timelog_day_header);
         String dayOfWeek = date.getDayOfWeek().toString();
@@ -99,12 +102,22 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
 
     @Override
     public void onTimeslotClick(int position) {
-        Timeslot timeslot = adapter.getTimeslotAtPosition(position);
+        ArrayList<Timeslot> timeslot = new ArrayList<>();
+        timeslot.add(adapter.getTimeslotAtPosition(position));
         showTimeActivitySelectorDialog(timeslot);
     }
 
+    @Override
+    public void setButtonVisible(boolean v) {
+        if (v) {
+            setAllButton.setVisibility(View.VISIBLE);
+        } else {
+            setAllButton.setVisibility(View.INVISIBLE);
+        }
+    }
 
-    public void showTimeActivitySelectorDialog(Timeslot timeslot) {
+
+    public void showTimeActivitySelectorDialog(ArrayList<Timeslot> timeslot) {
         TimeActivityChooserDialogFragment fragment = new TimeActivityChooserDialogFragment(timeslot);
         fragment.show(getActivity().getSupportFragmentManager(), "fragment");
     }

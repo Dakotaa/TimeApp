@@ -1,11 +1,14 @@
 package com.dakotalal.timeapp.ui;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.dakotalal.timeapp.R;
 
+import com.dakotalal.timeapp.notification.Notification_Receiver;
 import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListFragment;
 import com.dakotalal.timeapp.ui.Timelog.TimelogFragment;
 
@@ -21,9 +24,12 @@ import com.dakotalal.timeapp.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,42 +44,20 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //setSupportActionBar(binding.toolbar);
-
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
         NavController navController = Navigation.findNavController(findViewById(R.id.nav_fragment));
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-    }
+        // setup repeating notification for timelog
+        Calendar calendar = Calendar.getInstance();
+        Log.d("MainActivity", calendar.getTime().toString());
+        Intent intent = new Intent(getApplicationContext(), Notification_Receiver.class);
+        intent.setAction("TIMELOG_NOTIFICATION");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 55, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),30000,pendingIntent);
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.clear_data) {
-//            Toast.makeText(this, "Clearing the data...", Toast.LENGTH_SHORT).show();
-//            wordViewModel.deleteAll();
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -81,16 +65,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    public void launchTimeActivityList(View view) {
-        Intent intent = new Intent(this, TimeActivityListFragment.class);
-        startActivity(intent);
-    }
-
-    public void launchTimelog(View view) {
-        Intent intent = new Intent(this, TimelogFragment.class);
-        startActivity(intent);
     }
 
 }

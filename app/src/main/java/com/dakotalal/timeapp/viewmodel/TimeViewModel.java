@@ -45,7 +45,7 @@ public class TimeViewModel extends AndroidViewModel {
         if (timeActivitiesByLabel == null) {
             // keep all the activities in a hashtable, keyed by label, so they can be retrieved from just the label name
             timeActivitiesByLabel = new Hashtable<>();
-            if (allTimeActivities != null) {
+            if (allTimeActivities.getValue() != null) {
                 for (TimeActivity t : allTimeActivities.getValue()) {
                     timeActivitiesByLabel.put(t.getLabel(), t);
                 }
