@@ -22,6 +22,9 @@ import android.widget.Toast;
 import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -74,6 +77,14 @@ public class TimeActivityListFragment extends Fragment implements TimeActivityLi
                 TimeActivityListFragment.this.timeActivities = timeActivities;
             }
         });
+
+        // showcase tutorial the first time the user opens this fragments
+        new ShowcaseView.Builder(requireActivity())
+                .setContentTitle("Your Activities")
+                .setContentText("An activity is a representation of something you spend your time doing. You can put any of the activities here into a timeslot in your timelog.\n\nCreate your own activities to model how you spend your time. You can give each activity its own name, colour, and productivity score (positive score for productive activities).\n\nThere are some default activities to get you started, feel free to edit or delete them.")
+                .setStyle(R.style.CustomShowcaseTheme)
+                .singleShot(3)
+                .build();
     }
 
     /**

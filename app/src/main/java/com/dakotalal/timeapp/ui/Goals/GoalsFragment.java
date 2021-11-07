@@ -16,13 +16,9 @@ import com.dakotalal.timeapp.R;
  * create an instance of this fragment.
  */
 public class GoalsFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -38,7 +34,6 @@ public class GoalsFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment GoalsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static GoalsFragment newInstance(String param1, String param2) {
         GoalsFragment fragment = new GoalsFragment();
         Bundle args = new Bundle();

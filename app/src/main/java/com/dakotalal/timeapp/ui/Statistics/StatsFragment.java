@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.ui.BaseFragment;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -69,6 +70,14 @@ public class StatsFragment extends BaseFragment {
         viewPager.setCurrentItem(fragments.size());
 
         adapter.notifyDataSetChanged();
+
+        // showcase tutorial the first time the user opens this fragments
+        new ShowcaseView.Builder(requireActivity())
+                .setContentTitle("Your Statistics")
+                .setContentText("As you use your timelog to record how you spend your time, your personalized statistic model is updated.\n\nYour statistics reflect how much time you spend doing each activity, at different intervals.")
+                .setStyle(R.style.CustomShowcaseTheme)
+                .singleShot(1)
+                .build();
     }
 
     private StatsCollectionAdapter createStatsCollectionAdapter() {

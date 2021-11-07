@@ -4,11 +4,13 @@ package com.dakotalal.timeapp.ui;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.dakotalal.timeapp.R;
 
 import com.dakotalal.timeapp.notification.Notification_Receiver;
+import com.dakotalal.timeapp.ui.Statistics.SetupActivity;
 import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListFragment;
 import com.dakotalal.timeapp.ui.Timelog.TimelogFragment;
 
@@ -30,12 +32,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.Calendar;
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
+    public static String PREFS = "com.timeapp.prefs";
+    public static String PREFS_INTERVAL_LENGTH = "com.timeapp.prefs.interval_length";
+    public static String PREFS_NAME = "com.timeapp.prefs.name";
+    public static String PREFS_SETUP_COMPLETE = "com.timeapp.prefs.setup_complete";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),30000,pendingIntent);
 
+        // if the user hasn't completed the setup, launch the setup activity
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        boolean setupComplete = prefs.getBoolean(PREFS_SETUP_COMPLETE, false);
+        if (!setupComplete) {
+            launchFirstTimeSetup();
+        }
     }
 
     @Override
@@ -65,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void launchFirstTimeSetup() {
+        Intent intent = new Intent(this, SetupActivity.class);
+        startActivity(intent);
     }
 
 }

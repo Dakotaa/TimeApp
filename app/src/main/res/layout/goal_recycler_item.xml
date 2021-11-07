@@ -9,53 +9,51 @@
         android:id="@+id/timeslot_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryLight"
-        android:paddingVertical="12dp"
-        android:layout_marginVertical="2dp"
-        android:paddingHorizontal="10dp"
+        android:background="@color/colorPrimary"
+        android:paddingVertical="30dp"
+        android:layout_marginVertical="10dp"
         android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/timeslot_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/timeslot_time"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
         <TextView
-            android:id="@+id/timeslot_time"
+            android:id="@+id/goal_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck"
-            tools:text="00:00h - 00:30h" />
+            tools:text="Goal Name" />
 
         <TextView
-            android:id="@+id/timeslot_activity"
+            android:id="@+id/goal_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textAlignment="textEnd"
+            android:layout_marginStart="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:paddingHorizontal="8dp"
-            app:layout_constraintEnd_toStartOf="@id/score_icon"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/goal_name"
             tools:ignore="TextContrastCheck"
-            tools:text="Activity Name" />
+            tools:text="Goal Type" />
 
         <ImageView
-            android:id="@+id/score_icon"
+            android:id="@+id/edit_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_zero"
+            android:src="@drawable/ic_edit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

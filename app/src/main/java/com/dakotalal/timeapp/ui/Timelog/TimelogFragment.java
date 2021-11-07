@@ -19,6 +19,9 @@ import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.ui.BaseFragment;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -117,6 +120,14 @@ public class TimelogFragment extends BaseFragment {
 
             }
         });
+
+        // showcase tutorial the first time the user opens this fragments
+        new ShowcaseView.Builder(requireActivity())
+                .setContentTitle("Your Timelog")
+                .setContentText("Your timelog is where you log how you spend your time throughout the day. Each day is split into timeslots. Tap a timeslot and select the activity that you spent that time doing to enter it into your timelog.\n\nAs you fill out the timelog for the day, your daily score will update. A positive score indicates a product day, while a negative score indicates a less productive day.")
+                .setStyle(R.style.CustomShowcaseTheme)
+                .singleShot(2)
+                .build();
     }
 
     private TimelogDayCollectionAdapter createTimelogDayCollectionAdapter() {

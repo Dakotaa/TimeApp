@@ -1,5 +1,7 @@
 package com.dakotalal.timeapp.ui.Timelog;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +12,11 @@ import android.widget.TextView;
 
 import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.Timeslot;
+import com.dakotalal.timeapp.ui.MainActivity;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
@@ -90,9 +96,12 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
             adapter.setTimeslots(timeslots);
 
             double scoreVal = 0;
+            SharedPreferences prefs = requireActivity().getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
+            int intervalLength = prefs.getInt(MainActivity.PREFS_INTERVAL_LENGTH, 30);
+            double scoreWeight = intervalLength / 60.0;
             for (Timeslot t : timeslots) {
                 if (t.getActivityLabel() != null) {
-                    scoreVal += timeViewModel.getTimeActivityScore(t.getActivityLabel()) / 2.0;
+                    scoreVal += timeViewModel.getTimeActivityScore(t.getActivityLabel()) * scoreWeight;
                 }
             }
             TimelogDayFragment.this.score.setText("Score: " + scoreVal);

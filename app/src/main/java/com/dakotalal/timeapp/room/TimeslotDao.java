@@ -52,8 +52,8 @@ public interface TimeslotDao {
     LiveData<List<Timeslot>> getAllTimeslots();
 
     // get time activities ordered by how common they are, since the given time
-    @Query("SELECT * FROM activity_table INNER JOIN timeslot_table ON activity_table.label=timeslot_table.activityLabel WHERE start >= :time GROUP BY activityLabel ORDER BY COUNT(activityLabel) DESC")
-    LiveData<List<TimeActivity>> getMostCommonTimeActivities(long time);
+    @Query("SELECT * FROM activity_table LEFT OUTER JOIN timeslot_table ON label=activityLabel GROUP BY label ORDER BY COUNT(activityLabel) DESC")
+    LiveData<List<TimeActivity>> getMostCommonTimeActivities();
 
 
     // Get a LiveData List of Timeslots between the given start and end times

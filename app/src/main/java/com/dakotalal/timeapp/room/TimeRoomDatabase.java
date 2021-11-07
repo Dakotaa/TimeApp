@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
+import com.dakotalal.timeapp.room.entities.goals.ActivityGoal;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -14,11 +15,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Timeslot.class, TimeActivity.class, Day.class}, version = 5, exportSchema = false)
+@Database(entities = {Timeslot.class, TimeActivity.class, Day.class, ActivityGoal.class}, version = 10, exportSchema = false)
 public abstract class TimeRoomDatabase extends RoomDatabase {
 
     public abstract TimeslotDao timeSlotDao();
     public abstract TimeActivityDao timeActivityDao();
+    public abstract GoalDao goalDao();
 
     private static TimeRoomDatabase INSTANCE;
 

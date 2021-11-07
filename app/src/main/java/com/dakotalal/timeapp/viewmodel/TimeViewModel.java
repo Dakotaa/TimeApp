@@ -1,6 +1,8 @@
 package com.dakotalal.timeapp.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
@@ -9,6 +11,7 @@ import com.dakotalal.timeapp.repository.TimeRepository;
 import com.dakotalal.timeapp.room.entities.Day;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
+import com.dakotalal.timeapp.ui.MainActivity;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -18,6 +21,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
@@ -93,11 +97,6 @@ public class TimeViewModel extends AndroidViewModel {
         return -1;
     }
 
-    public void deleteAllTimeActivities() {
-        timeRepository.deleteAllTimeActivities();
-    }
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Timeslot>> getDayTimeslots(LocalDate date) {
         if (currentDayTimeslots == null) {
@@ -145,16 +144,6 @@ public class TimeViewModel extends AndroidViewModel {
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<Timeslot>> createDay(LocalDate date) {
-        LiveData<List<Timeslot>> timeslots = new MutableLiveData<>(new ArrayList<Timeslot>());
-        ZoneId zoneId = ZoneId.systemDefault();
-        // create timeslots for the day
-        long start = date.atTime(0, 0).atZone(zoneId).toEpochSecond();
-        for (int i = 0; i < 24; i++) {
-            timeslots.getValue().add(new Timeslot(start, start + 3600));
-            start += 3600;
-        }
-        timeRepository.insertDay(new Day(date));
-        timeRepository.insertTimeslots(timeslots.getValue());
-        return timeslots;
+        return timeRepository.createDay(date);
     }
 }

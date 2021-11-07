@@ -68,7 +68,6 @@ public class TimeActivityListAdapter extends RecyclerView.Adapter<TimeActivityLi
             String label = current.getLabel();
 
             if (actionButtons) {
-                // TODO implement edit button functionality
                 holder.editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
