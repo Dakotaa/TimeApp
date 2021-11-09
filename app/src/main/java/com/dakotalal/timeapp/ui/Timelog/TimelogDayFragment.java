@@ -65,13 +65,10 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
         score = requireView().findViewById(R.id.timelog_day_score);
         setAllButton = requireView().findViewById(R.id.button_set_multiple);
         setAllButton.setVisibility(View.INVISIBLE);
-        setAllButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimeActivitySelectorDialog(adapter.getCheckedTimeslots());
-                adapter.clearCheckedTimeslots();
-                setButtonVisible(false);
-            }
+        setAllButton.setOnClickListener(view1 -> {
+            showTimeActivitySelectorDialog(adapter.getCheckedTimeslots());
+            adapter.clearCheckedTimeslots();
+            setButtonVisible(false);
         });
         // Format the header
         TextView header = requireView().findViewById(R.id.timelog_day_header);
@@ -83,7 +80,7 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
         header.setText(dateText);
 
         // Setup the adapter for the recyclerview to display the timeslots for this day
-        adapter = new TimeslotListAdapter(getActivity(), TimelogDayFragment.this, timeViewModel);
+        adapter = new TimeslotListAdapter(getActivity(), TimelogDayFragment.this, timeViewModel, requireActivity().getSupportFragmentManager());
         RecyclerView recyclerView = requireView().findViewById(R.id.fragment_timeslots);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -128,6 +125,6 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
 
     public void showTimeActivitySelectorDialog(ArrayList<Timeslot> timeslot) {
         TimeActivityChooserDialogFragment fragment = new TimeActivityChooserDialogFragment(timeslot);
-        fragment.show(getActivity().getSupportFragmentManager(), "fragment");
+        fragment.show(requireActivity().getSupportFragmentManager(), "fragment");
     }
 }

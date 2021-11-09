@@ -15,7 +15,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Timeslot.class, TimeActivity.class, Day.class, ActivityGoal.class}, version = 10, exportSchema = false)
+@Database(entities = {Timeslot.class, TimeActivity.class, Day.class, ActivityGoal.class}, version = 11, exportSchema = false)
 public abstract class TimeRoomDatabase extends RoomDatabase {
 
     public abstract TimeslotDao timeSlotDao();

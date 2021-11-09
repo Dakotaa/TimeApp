@@ -51,4 +51,7 @@
         <br/><br/>You cannot change this after you select one.</string>
     <string name="button_continue">Continue</string>
     <string name="name_hint">Name</string>
+    <string name="label_comment">Enter Comment</string>
+    <string name="hint_comment">Additional info</string>
+    <string name="label_select_activity">Select Activity</string>
 </resources>

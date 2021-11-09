@@ -1,14 +1,10 @@
 package com.dakotalal.timeapp.ui.Timelog;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.dakotalal.timeapp.R;
 import com.dakotalal.timeapp.room.entities.TimeActivity;
@@ -16,12 +12,9 @@ import com.dakotalal.timeapp.room.entities.Timeslot;
 import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListAdapter;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -45,7 +38,7 @@ public class TimeActivityChooserDialogFragment extends DialogFragment implements
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceBundle) {
-        View v = inflater.inflate(R.layout.activity_select_time_activity, container, false);
+        View v = inflater.inflate(R.layout.dialog_select_time_activity, container, false);
         //getDialog().setTitle("Select Activity");
         recyclerView = v.findViewById(R.id.activity_list_recyclerview);
         adapter = new TimeActivityListAdapter(getActivity(), this, timeViewModel, false, this);
