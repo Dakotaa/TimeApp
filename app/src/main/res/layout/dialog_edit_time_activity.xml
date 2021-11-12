@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorScreenBackground"
     android:orientation="vertical"
+    android:gravity="bottom"
     android:padding="8dp"
     android:id="@+id/create_time_activity">
 
@@ -73,7 +73,8 @@
         android:id="@+id/color_picker"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:paddingVertical="5dp"
         android:layout_below="@id/label_colour" />
 
 
-</RelativeLayout>
+</LinearLayout>

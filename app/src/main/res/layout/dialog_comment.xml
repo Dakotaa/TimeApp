@@ -20,14 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_comment"
-        android:inputType="textMultiLine"
+        android:inputType="text"
         />
 
     <Button
         android:id="@+id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:text="@string/button_done"
         android:layout_marginHorizontal="10dp"
         android:onClick="editComment"
         />

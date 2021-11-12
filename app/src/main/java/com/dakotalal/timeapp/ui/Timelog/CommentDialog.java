@@ -14,6 +14,7 @@ import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListAdapter;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -28,7 +29,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CommentDialog extends DialogFragment  {
+/**
+ * Dialog for viewing/editing the comments of a timeslot in the Timelog.
+ */
+public class CommentDialog extends BottomSheetDialogFragment {
     Timeslot timeslot;
     String comment;
     Button button;
@@ -64,6 +68,4 @@ public class CommentDialog extends DialogFragment  {
         }
         this.dismiss();
     }
-
-
 }

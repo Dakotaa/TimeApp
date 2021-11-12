@@ -93,16 +93,17 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
             adapter.setTimeslots(timeslots);
 
             double scoreVal = 0;
-            SharedPreferences prefs = requireActivity().getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
-            int intervalLength = prefs.getInt(MainActivity.PREFS_INTERVAL_LENGTH, 30);
-            double scoreWeight = intervalLength / 60.0;
-            for (Timeslot t : timeslots) {
-                if (t.getActivityLabel() != null) {
-                    scoreVal += timeViewModel.getTimeActivityScore(t.getActivityLabel()) * scoreWeight;
+            if (getActivity() != null) {
+                SharedPreferences prefs = requireActivity().getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
+                int intervalLength = prefs.getInt(MainActivity.PREFS_INTERVAL_LENGTH, 30);
+                double scoreWeight = intervalLength / 60.0;
+                for (Timeslot t : timeslots) {
+                    if (t.getActivityLabel() != null) {
+                        scoreVal += timeViewModel.getTimeActivityScore(t.getActivityLabel()) * scoreWeight;
+                    }
                 }
+                TimelogDayFragment.this.score.setText("Daily Score: " + scoreVal);
             }
-            TimelogDayFragment.this.score.setText("Score: " + scoreVal);
-
         });
     }
 

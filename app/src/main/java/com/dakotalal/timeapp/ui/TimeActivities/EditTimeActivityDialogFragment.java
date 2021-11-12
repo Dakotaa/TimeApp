@@ -11,17 +11,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.dakotalal.timeapp.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorListener;
 
 import androidx.fragment.app.DialogFragment;
 
-public class EditTimeActivityDialogFragment extends DialogFragment {
+public class EditTimeActivityDialogFragment extends BottomSheetDialogFragment {
     private ColorPickerView colourPickerView;
     private int score;
     private int colour;
@@ -112,7 +114,6 @@ public class EditTimeActivityDialogFragment extends DialogFragment {
         // listen for changes from the colour picker
         colourPickerView.setColorListener((ColorListener) (color, fromUser) -> {
             // Set the background colour to the select colour
-            RelativeLayout relativeLayout = view.findViewById(R.id.create_time_activity);
             colourPickerView.setBackgroundColor(color);
         });
 

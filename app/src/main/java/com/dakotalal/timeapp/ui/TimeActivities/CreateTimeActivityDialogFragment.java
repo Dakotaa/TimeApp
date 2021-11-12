@@ -22,10 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dakotalal.timeapp.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorListener;
 
-public class CreateTimeActivityDialogFragment extends DialogFragment {
+public class CreateTimeActivityDialogFragment extends BottomSheetDialogFragment {
     private EditText mEditWordView;
     private ColorPickerView colourPickerView;
     private int score = 0;

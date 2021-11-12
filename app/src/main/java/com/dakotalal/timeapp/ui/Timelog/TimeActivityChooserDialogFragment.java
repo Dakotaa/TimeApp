@@ -11,6 +11,7 @@ import com.dakotalal.timeapp.room.entities.TimeActivity;
 import com.dakotalal.timeapp.room.entities.Timeslot;
 import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListAdapter;
 import com.dakotalal.timeapp.viewmodel.TimeViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TimeActivityChooserDialogFragment extends DialogFragment implements TimeActivityListAdapter.OnTimeActivityListener {
+public class TimeActivityChooserDialogFragment extends BottomSheetDialogFragment implements TimeActivityListAdapter.OnTimeActivityListener {
     RecyclerView recyclerView;
     TimeActivityListAdapter adapter;
     TimeViewModel timeViewModel;
