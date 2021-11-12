@@ -41,12 +41,15 @@ public interface TimeslotDao {
     void update(Timeslot timeslot);
 
 
-    // Get the TimeSlot that the given time occurs in
+    // Get the count of timeslots that have no activity set
 
+    // Get the TimeSlot that the given time occurs in
     @Query("SELECT * from timeslot_table WHERE start >= :time AND :time < finish")
     LiveData<Timeslot> getTimeslot(long time);
 
     // Get a LiveData List of all Timeslots
+    @Query("SELECT count(*) from timeslot_table WHERE start >= :startTime AND start < :endTime AND activityLabel is NULL")
+    LiveData<Integer> getEmptyTimeslotCountSince(long startTime, long endTime);
 
     @Query("SELECT * from timeslot_table")
     LiveData<List<Timeslot>> getAllTimeslots();

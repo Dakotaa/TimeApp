@@ -142,6 +142,11 @@ public class TimeRepository {
         return timeslotDao.getActivitycount(label, start, finish);
     }
 
+    public LiveData<Integer> getEmptyTimeslotCountSince(long start, long end) {
+        return timeslotDao.getEmptyTimeslotCountSince(start, end);
+    }
+
+
     /**
      * Creates a day in the database representing the current day
      */

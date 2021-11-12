@@ -52,11 +52,9 @@ public class TimelogDayFragment extends Fragment implements TimeslotListAdapter.
         Bundle args = getArguments();
         LocalDate date;
         if (args == null) {
-            //Log.d("TimelogDayFragment", "args null");
             date = LocalDate.now();
         } else {
             long timestamp = args.getLong(ARG_DAY_TIMESTAMP);
-            //Log.d("TimelogDayFragment", "timestamp: "  + timestamp);
             date = LocalDate.ofEpochDay(timestamp);
         }
 

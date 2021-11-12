@@ -16,11 +16,6 @@
         android:icon="@drawable/icon_timelog"
         android:title="@string/nav_timelog_label"/>
     <item
-        android:id="@+id/nav_goals"
-        android:enabled="true"
-        android:icon="@drawable/ic_goals"
-        android:title="@string/nav_goals_label"/>
-    <item
         android:id="@+id/nav_activities"
         android:enabled="true"
         android:icon="@drawable/icon_activities"

@@ -14,6 +14,7 @@ import com.dakotalal.timeapp.room.entities.Timeslot;
 import com.dakotalal.timeapp.ui.MainActivity;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -134,6 +135,11 @@ public class TimeViewModel extends AndroidViewModel {
 
     public LiveData<Integer> getActivityCount(String activityLabel, long start, long end) {
         return timeRepository.getActivityCount(activityLabel, start, end);
+    }
+
+    public LiveData<Integer> getEmptyTimeslotCountSince(long start) {
+        long end = System.currentTimeMillis() / 1000;
+        return timeRepository.getEmptyTimeslotCountSince(start, end);
     }
 
 
