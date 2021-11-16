@@ -10,9 +10,6 @@ import android.os.Bundle;
 import com.dakotalal.timeapp.R;
 
 import com.dakotalal.timeapp.notification.Notification_Receiver;
-import com.dakotalal.timeapp.ui.Statistics.SetupActivity;
-import com.dakotalal.timeapp.ui.TimeActivities.TimeActivityListFragment;
-import com.dakotalal.timeapp.ui.Timelog.TimelogFragment;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,12 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import java.util.Calendar;
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
 

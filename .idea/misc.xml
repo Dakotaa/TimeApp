@@ -24,10 +24,12 @@
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/dialog_new_time_activity.xml" value="0.4166666666666667" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/dialog_select_time_acitvity.xml" value="0.5" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/dialog_select_time_activity.xml" value="0.5" />
+        <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_daily_stats.xml" value="0.5401041666666667" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_first.xml" value="0.47604166666666664" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_goal_recycler.xml" value="0.5541666666666667" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_goals.xml" value="0.4083333333333333" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_home.xml" value="0.33" />
+        <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_interval_stats.xml" value="0.4453125" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_piestat.xml" value="0.4083333333333333" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_second.xml" value="0.47604166666666664" />
         <entry key="..\:/Users/Dakota/AndroidStudioProjects/TimeApp/app/src/main/res/layout/fragment_statistics.xml" value="0.5" />

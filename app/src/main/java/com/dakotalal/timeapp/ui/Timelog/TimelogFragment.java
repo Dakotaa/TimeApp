@@ -47,6 +47,8 @@ public class TimelogFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
+        // create today, so the unlogged timeslots is accurate even if the timelog hasn't been opened
+        timeViewModel.createToday();
         viewPager = requireView().findViewById(R.id.timelog_view_pager);
         viewPager.setAdapter(createTimelogDayCollectionAdapter());
 

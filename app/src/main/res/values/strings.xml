@@ -47,12 +47,13 @@
     <string name="timeslot_length_30">30 minutes</string>
     <string name="timeslot_length_60">60 minutes</string>
     <string name="timeslot_length_description">Your timeslot length is how much time each timeslot represents. Shorter intervals will result in a more detailed model, but will be more effort to log.
-        <br/><br/>A timeslot length of 60 minutes (24 timeslots per day) means you can log one activity every hour, whereas 15 minutes (96 timeslots per day) means you can log four activities per hour. 30 minutes is a good compromise.
-        <br/><br/>You cannot change this after you select one.</string>
+        <br /><br />A timeslot length of 60 minutes (24 timeslots per day) means you can log one activity every hour, whereas 15 minutes (96 timeslots per day) means you can log four activities per hour. 30 minutes is a good compromise.
+        <br /><br />You cannot change this after you select one.</string>
     <string name="button_continue">Continue</string>
     <string name="name_hint">Name</string>
     <string name="label_comment">Comment</string>
     <string name="hint_comment">Additional info</string>
     <string name="label_select_activity">Select Activity</string>
     <string name="button_done">Done</string>
+    <string name="stats_title">Activities By Hour</string>
 </resources>

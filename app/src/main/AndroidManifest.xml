@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeApp">
         <activity
-            android:name=".ui.Statistics.SetupActivity"
+            android:name=".ui.SetupActivity"
             android:label="First Time Setup"
             android:screenOrientation="portrait"
             android:exported="true" />

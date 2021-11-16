@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textStyle="italic"
         android:textSize="20sp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryLight"
         android:paddingVertical="5dp"
         android:paddingHorizontal="10dp"
         android:text="@string/label_select_activity"
@@ -21,7 +21,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_list_recyclerview"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryLight"
         android:layout_height="match_parent"
         android:layout_margin="0dp"
         android:layout_marginTop="0dp"

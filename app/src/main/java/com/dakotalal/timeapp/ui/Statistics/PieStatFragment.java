@@ -35,12 +35,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PieStatFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PieStatFragment extends Fragment {
     private static final String ARG_TIMESTAMP_START = "timestampStart";
     private static final String ARG_TIMESTAMP_END = "timestampEnd";
@@ -48,7 +42,7 @@ public class PieStatFragment extends Fragment {
 
     private long timestampStart;
     private long timestampEnd;
-    private String label;
+    public String label;
 
     ViewPager2 viewPager;
     private TimeViewModel timeViewModel;
@@ -60,7 +54,8 @@ public class PieStatFragment extends Fragment {
     PieChart chart;
     List<PieEntry> entries;
 
-    public PieStatFragment() {
+    public PieStatFragment(String label) {
+        this.label = label;
         // Required empty public constructor
     }
 
@@ -73,7 +68,7 @@ public class PieStatFragment extends Fragment {
      * @return A new instance of fragment StatisticsFragment.
      */
     public static PieStatFragment newInstance(long timestampStart, long timestampEnd, String label) {
-        PieStatFragment fragment = new PieStatFragment();
+        PieStatFragment fragment = new PieStatFragment(label);
         Bundle args = new Bundle();
         args.putLong(ARG_TIMESTAMP_START, timestampStart);
         args.putLong(ARG_TIMESTAMP_END, timestampEnd);
@@ -135,7 +130,6 @@ public class PieStatFragment extends Fragment {
             }
         };
 
-        // This is a horrible approach, but I just wanted to get it working first.
         // TODO Improve timeslot count retrieval
         timeViewModel.getAllTimeActivities().observe(requireActivity(), new Observer<List<TimeActivity>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -172,6 +166,7 @@ public class PieStatFragment extends Fragment {
         d.setValueFormatter(formatter);
         d.setValueTextSize(10.0f);
         chart.setData(d);
+        chart.getDescription().setEnabled(false);
         chart.invalidate();
     }
 }

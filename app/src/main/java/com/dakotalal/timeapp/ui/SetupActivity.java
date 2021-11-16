@@ -1,4 +1,4 @@
-package com.dakotalal.timeapp.ui.Statistics;
+package com.dakotalal.timeapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
