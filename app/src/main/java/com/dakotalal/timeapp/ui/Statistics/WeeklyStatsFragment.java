@@ -21,6 +21,7 @@ import com.dakotalal.timeapp.viewmodel.TimeViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.text.MessageFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,14 +60,14 @@ public class WeeklyStatsFragment extends IntervalStatsFragment {
             @Override
             public void onChanged(List<Day> days) {
                 List<PieStatFragment> fragments = new ArrayList<>();
+                LocalDate lastStart = LocalDate.now();
                 for (int i = days.size() - 1; i >= 0; i--) {
-                    LocalDate lastStart = LocalDate.now();
                     Day d = days.get(i);
-                    if (d.getDate().getDayOfWeek().equals(DayOfWeek.THURSDAY)) {    // if this day is the start of the week, following 6 days make up the week
+                    if (d.getDate().getDayOfWeek().equals(DayOfWeek.MONDAY)) {    // if this day is the start of the week, following 6 days make up the week
                         lastStart = d.getDate();
-                        fragments.add(PieStatFragment.newInstance(d.getDate().toEpochDay(), d.getDate().plusDays(6).toEpochDay(), d.getDate().toString() + " - " + d.getDate().plusDays(6).toString()));
+                        fragments.add(PieStatFragment.newInstance(d.getDate().toEpochDay(), d.getDate().plusDays(6).toEpochDay(), getLabelFormat(d.getDate(), d.getDate().plusDays(6))));
                     } else if (i == 0) {
-                        fragments.add(PieStatFragment.newInstance(lastStart.minusDays(7).toEpochDay(), lastStart.minusDays(1).toEpochDay(), lastStart.minusDays(7).toString() + " - " + lastStart.minusDays(1).toString()));
+                        fragments.add(PieStatFragment.newInstance(lastStart.minusDays(7).toEpochDay(), lastStart.minusDays(1).toEpochDay(), getLabelFormat(lastStart.minusDays(7), lastStart.minusDays(1))));
                     }
                 }
                 Collections.reverse(fragments);
@@ -84,5 +85,12 @@ public class WeeklyStatsFragment extends IntervalStatsFragment {
                 }
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private String getLabelFormat(LocalDate start, LocalDate end) {
+        String startFormat = MessageFormat.format("{0}. {1}, {2,number,#}", start.getMonth().toString().substring(0, 3), start.getDayOfMonth(), start.getYear());
+        String endFormat = MessageFormat.format("{0}. {1}, {2,number,#}", end.getMonth().toString().substring(0, 3), end.getDayOfMonth(), end.getYear());
+        return startFormat + " - " + endFormat;
     }
 }

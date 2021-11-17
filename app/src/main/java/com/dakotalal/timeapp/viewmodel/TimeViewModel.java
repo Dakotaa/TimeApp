@@ -37,6 +37,7 @@ public class TimeViewModel extends AndroidViewModel {
     private LiveData<List<Day>> allDays;
     private LiveData<List<Timeslot>> currentDayTimeslots;
     private Hashtable<String, TimeActivity> timeActivitiesByLabel;
+    private LiveData<List<TimeActivity>> mostCommonActivities;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public TimeViewModel(Application application) {
@@ -115,8 +116,16 @@ public class TimeViewModel extends AndroidViewModel {
         return this.allTimeActivities;
     }
 
-    public LiveData<List<TimeActivity>> getMostCommonTimeActivities(long since) {
+    public LiveData<List<TimeActivity>> getMostCommonTimeActivitiesSince(long since) {
         return timeRepository.getMostCommonTimeActivities(since);
+    }
+
+    public LiveData<List<TimeActivity>> getMostCommonTimeActivities() {
+        if (mostCommonActivities == null) {
+            mostCommonActivities = new MutableLiveData<>();
+            mostCommonActivities = timeRepository.getMostCommonTimeActivities(0);
+        }
+        return mostCommonActivities;
     }
 
     public LiveData<List<Day>> getAllDays() {

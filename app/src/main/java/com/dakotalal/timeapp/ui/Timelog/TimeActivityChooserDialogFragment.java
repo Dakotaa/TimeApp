@@ -48,7 +48,7 @@ public class TimeActivityChooserDialogFragment extends BottomSheetDialogFragment
         // setup and initialize the view model
         timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
         // Observe the list of activities
-        timeViewModel.getMostCommonTimeActivities(LocalDate.now().minusDays(7).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).observe(this, new Observer<List<TimeActivity>>() {
+        timeViewModel.getMostCommonTimeActivitiesSince(LocalDate.now().minusDays(7).atStartOfDay(ZoneId.systemDefault()).toEpochSecond()).observe(this, new Observer<List<TimeActivity>>() {
             @Override
             public void onChanged(@Nullable final List<TimeActivity> timeActivities) {
                 // Update the cached copy of the activities in the adapter.

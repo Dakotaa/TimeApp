@@ -61,6 +61,7 @@ public class AllTimeStatsFragment extends IntervalStatsFragment {
             adapter.setPieStatFragments(fragments);
             viewPager.setCurrentItem(fragments.size());
             adapter.notifyDataSetChanged();
+            tabLayout.getTabAt(0).setText("All Time Statistics");
         });
     }
 }
