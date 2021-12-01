@@ -151,6 +151,10 @@ public class TimeViewModel extends AndroidViewModel {
         return timeRepository.getEmptyTimeslotCountSince(start, end);
     }
 
+    public LiveData<List<Timeslot>> getEmptyTimeslotsToday() {
+        return timeRepository.getEmptyTimeslotsToday();
+    }
+
 
     /**
      * Creates the timeslots for a day and inserts them into the database

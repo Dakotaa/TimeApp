@@ -51,6 +51,10 @@ public interface TimeslotDao {
     @Query("SELECT count(*) from timeslot_table WHERE start >= :startTime AND start < :endTime AND activityLabel is NULL")
     LiveData<Integer> getEmptyTimeslotCountSince(long startTime, long endTime);
 
+    // Get a LiveData List of all Timeslots without an activity
+    @Query("SELECT * from timeslot_table WHERE start >= :startTime AND start < :endTime AND activityLabel is NULL")
+    LiveData<List<Timeslot>> getEmptyTimeslotsSince(long startTime, long endTime);
+
     @Query("SELECT * from timeslot_table")
     LiveData<List<Timeslot>> getAllTimeslots();
 

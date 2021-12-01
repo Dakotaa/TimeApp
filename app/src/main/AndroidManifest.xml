@@ -11,9 +11,10 @@
         android:theme="@style/Theme.TimeApp">
         <activity
             android:name=".ui.SetupActivity"
+            android:exported="true"
             android:label="First Time Setup"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
@@ -26,6 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".notification.NotificationReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
+
+        <service android:name=".ui.MainActivity$NotificationActionService" />
     </application>
 
     <uses-permission android:name="android.permission.SET_ALARM" />

@@ -146,6 +146,13 @@ public class TimeRepository {
         return timeslotDao.getEmptyTimeslotCountSince(start, end);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LiveData<List<Timeslot>> getEmptyTimeslotsToday() {
+        long start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+        long end = System.currentTimeMillis() / 1000;
+        return timeslotDao.getEmptyTimeslotsSince(start, end);
+    }
+
 
     /**
      * Creates a day in the database representing the current day

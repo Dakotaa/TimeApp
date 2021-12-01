@@ -63,7 +63,11 @@ public class HomeFragment extends Fragment {
             time = "Good evening";
         }
 
-        welcomeText.setText(time + ", " + name + "!");
+        if (name.isEmpty()) {
+            welcomeText.setText(time + "!");
+        } else {
+            welcomeText.setText(time + ", " + name + "!");
+        }
 
         TimeViewModel timeViewModel = new ViewModelProvider(this).get(TimeViewModel.class);
         timeViewModel.createToday();

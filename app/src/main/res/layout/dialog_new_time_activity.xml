@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:background="#DADADA"
+        android:textColor="#000000"
         android:hint="@string/hint_activity_name"
         android:inputType="textCapSentences"
         android:layout_marginBottom="8dp"/>
