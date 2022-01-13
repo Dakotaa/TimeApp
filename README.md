@@ -1,7 +1,7 @@
 # TimeLog
 __Created for CMPT 412 as a persuasive application project.__
 
-Timelog is a persuasive Android app intended to provide a platform for the user to track how they spend their time so that they can view and evaluate their patterns in order to develop better habits and be more productive. The core mechanic of the app is the time log, in which the user logs how they spend their time throughout the day by entering an activity for each time slot according to what they were doing during that time. From the timelog entries, a model of the user’s time is created, and from this model, statistics are derived. The user can view these statistics to gain some insight into how they spend their time throughout the day, and what activities take up their time. 
+TimeLog is a persuasive Android app intended to provide a platform for the user to track how they spend their time so that they can view and evaluate their patterns in order to develop better habits and be more productive. The core mechanic of the app is the time log, in which the user logs how they spend their time throughout the day by entering an activity for each time slot according to what they were doing during that time. From the timelog entries, a model of the user’s time is created, and from this model, statistics are derived. The user can view these statistics to gain some insight into how they spend their time throughout the day, and what activities take up their time. 
 
 
 # Installation
